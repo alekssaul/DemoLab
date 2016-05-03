@@ -12,8 +12,8 @@ export KUBE_GCE_MASTER_PROJECT=coreos-cloud
 export KUBE_GCE_MASTER_IMAGE=$(gcloud compute images list | grep coreos | grep alpha | awk '{print $1}')
 export ENABLE_NODE_AUTOSCALER=false
 export AUTOSCALER_MAX_NODES=5
-export ENABLE_CLUSTER_MONITORING=googleinfluxdb
-export ENABLE_CLUSTER_DNS=true
+export KUBE_ENABLE_CLUSTER_MONITORING=googleinfluxdb
+export KUBE_ENABLE_CLUSTER_DNS=true
 export DNS_DOMAIN=tectonic.local
 ```
 
