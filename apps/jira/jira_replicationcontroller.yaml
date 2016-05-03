@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: jira
+spec:
+  replicas: 1
+  selector:
+    app: jira
+    tier: application      
+  template:
+    metadata:
+      labels:
+        app: jira
+        tier: application        
+    spec:
+      containers:
+      - name: jira
+        image: cptactionhank/atlassian-jira:latest
