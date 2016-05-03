@@ -1,5 +1,7 @@
 # Setup Tectonic Console
 
+Create Namespace and use the tectonic console manifest to create the replication controller
+
 ```shell
 kubectl create namespace tectonic-system
 kubectl --namespace=tectonic-system create -f https://tectonic.com/enterprise/docs/latest/deployer/files/tectonic-console.yaml
