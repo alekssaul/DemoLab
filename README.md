@@ -25,3 +25,6 @@ Deploy Kubernetes
 ``` shell
 curl -sS https://get.k8s.io | bash
 ``` 
+
+Test to make sure kubernetes nodes are available
+``` kubectl get nodes ```
