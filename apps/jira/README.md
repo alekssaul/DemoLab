@@ -54,8 +54,15 @@ CREATE USER 'jira'@'%' IDENTIFIED BY 'jira';
 GRANT ALL PRIVILEGES ON jira.* TO 'jira'@'%' WITH GRANT OPTION;
 ```
 
+Create persistent disk
+
+```shell
+gcloud compute disks create --size=20GB jira-home
+```
+
 ## Create JIRA App
 ```shell
+kubectl --namespace=jira create -f jira_configmaps.yaml
 kubectl --namespace=jira create -f jira_replicationcontroller.yaml
 kubectl --namespace=jira create -f jira_service.yaml
 ```
