@@ -3,6 +3,8 @@ SE Demo Lab as Code
 
 * Setup gcloud settings
 
+Setup Environmental variables for kubenernetes deployment settings
+
 ```shell
 export KUBE_GCE_ZONE=us-east1-b
 
@@ -16,5 +18,10 @@ export ENABLE_CLUSTER_MONITORING=googleinfluxdb
 export ENABLE_CLUSTER_DNS=true
 export DNS_DOMAIN=tectonic.local
 
-./cluster/kube-up.sh
 ```
+
+Deploy Kubernetes
+
+``` shell
+curl -sS https://get.k8s.io | bash
+``` 
