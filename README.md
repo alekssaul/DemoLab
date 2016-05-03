@@ -15,6 +15,7 @@ export AUTOSCALER_MAX_NODES=5
 export KUBE_ENABLE_CLUSTER_MONITORING=googleinfluxdb
 export KUBE_ENABLE_CLUSTER_DNS=true
 export DNS_DOMAIN=tectonic.local
+export KUBECTL_BIN=/opt/kubernetes/server/bin/kubectl
 ```
 
 Deploy Kubernetes
@@ -27,3 +28,5 @@ Test to make sure kubernetes nodes are available
 ``` shell 
 kubectl get nodes 
 ```
+
+vi /opt/kubernetes/saltbase/salt/kube-addons/kube-addons.sh
