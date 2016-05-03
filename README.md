@@ -1,6 +1,9 @@
 # DemoLab
-Demo Lab as Code
+SE Demo Lab as Code
 
+* Setup gcloud settings
+
+```shell
 export KUBE_GCE_ZONE=us-east1-b
 
 
@@ -14,14 +17,4 @@ export ENABLE_CLUSTER_DNS=true
 export DNS_DOMAIN=tectonic.local
 
 ./cluster/kube-up.sh
-
-kubectl create namespace tectonic-system
-kubectl --namespace=tectonic-system create -f https://tectonic.com/enterprise/docs/latest/deployer/files/tectonic-console.yaml
-
-Install Pull Secret
-kubectl --namespace=tectonic-system create -f coreos-pull-secret.yml
-
-View Tectonic Console
-kubectl  --namespace=tectonic-system get pods -l tectonic-app=console -o template --template="{{range.items}}{{.metadata.name}}{{end}}" | xargs -I{} kubectl port-forward {} 9000
-
-
+```
