@@ -13,8 +13,6 @@ export KUBE_GCE_MASTER_IMAGE=$(gcloud compute images list | grep coreos | grep a
 export ENABLE_NODE_AUTOSCALER=false
 export AUTOSCALER_MAX_NODES=5
 export KUBE_ENABLE_CLUSTER_MONITORING=googleinfluxdb
-export KUBE_ENABLE_CLUSTER_DNS=true
-export DNS_DOMAIN=tectonic.local
 export KUBECTL_BIN=/opt/kubernetes/server/bin/kubectl
 ```
 
@@ -29,4 +27,5 @@ Test to make sure kubernetes nodes are available
 kubectl get nodes 
 ```
 
-vi /opt/kubernetes/saltbase/salt/kube-addons/kube-addons.sh
+*** As of Kubernetes 1.2.3 there is an issue with python being referenced to incorrect python image; https://github.com/kubernetes/kubernetes/commit/32426d6e97a641182163d667f980993ea01b2f8f fixed it.. may need to manually change /opt/kubernetes/saltbase/salt/kube-addons/kube-addons.sh to use 
+```local -r PYTHON_IMAGE=gcr.io/google_containers/python:v1``` instead of ```local -r PYTHON_IMAGE=python:2.7-slim-pyyaml``` or built kubernetes from master

@@ -26,7 +26,32 @@ Verify the cluster is healthy. (Note that the password is available in pxc-node 
 
 ```shell
 MYSQLPOD=$(kubectl --namespace=jira get pods|grep pxc-node3|awk '{ print $1 }')
-kubectl exec $MYSQLPOD -i -t -- mysql -u root -p -h pxc-cluster
+kubectl --namespace=jira exec $MYSQLPOD -i -t -- mysql -u root -p -h pxc-cluster
+```
+
+Verify That the cluster size is accurate
+
+```shell
+show status like 'wsrep_cluster_size';
+````
+
+should output
+
+```
+mysql> show status like 'wsrep_cluster_size';
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| wsrep_cluster_size | 3     |
++--------------------+-------+
+1 row in set (0.06 sec)
+````
+
+Create a new database for JIRA and assign rights to the user
+```shell
+CREATE DATABASE jira;
+CREATE USER 'jira'@'%' IDENTIFIED BY 'jira';
+GRANT ALL PRIVILEGES ON jira.* TO 'jira'@'%' WITH GRANT OPTION;
 ```
 
 ## Create JIRA App
@@ -34,3 +59,5 @@ kubectl exec $MYSQLPOD -i -t -- mysql -u root -p -h pxc-cluster
 kubectl --namespace=jira create -f jira_replicationcontroller.yaml
 kubectl --namespace=jira create -f jira_service.yaml
 ```
+Access JIRA application and walk through the wizard.
+
