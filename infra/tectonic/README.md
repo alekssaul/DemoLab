@@ -3,8 +3,9 @@
 ```shell
 kubectl create namespace tectonic-system
 kubectl --namespace=tectonic-system create -f https://tectonic.com/enterprise/docs/latest/deployer/files/tectonic-console.yaml
-
+```
 Install Pull Secret
+```shell
 kubectl --namespace=tectonic-system create -f coreos-pull-secret.yml
 
 ```
