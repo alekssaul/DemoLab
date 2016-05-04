@@ -10,6 +10,7 @@ spec:
     app: jira
     tier: application  
   type: LoadBalancer
+  sessionAffinity: ClientIP
   ports:
   - name: jira
     port: 8080

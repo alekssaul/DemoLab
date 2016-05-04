@@ -16,3 +16,17 @@ spec:
       containers:
       - name: jira
         image: cptactionhank/atlassian-jira:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /data/jira/sharedhome
+          name: nfs
+        - name: jira-configmap
+          mountPath: /var/atlassian/jira
+      volumes:
+      - name: nfs
+        # This GCE PD must already exist.
+        persistentVolumeClaim:
+          claimName: nfs
+      - name: jira-configmap
+        configMap:
+          name: jira-configmap
