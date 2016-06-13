@@ -11,33 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
----
-  kind: Service
-  apiVersion: v1
-  metadata:
-    name: jenkins-ui
-    namespace: jenkins
-  spec:
-    type: LoadBalancer
-    selector:
-      app: master
-    ports:
-      - protocol: TCP
-        port: 8080
-        targetPort: 8080
-        name: ui
 
----
-  kind: Service
-  apiVersion: v1
-  metadata:
-    name: jenkins-discovery
-    namespace: jenkins
-  spec:
-    selector:
-      app: master
-    ports:
-      - protocol: TCP
-        port: 50000
-        targetPort: 50000
-        name: slaves
+kind: Service
+apiVersion: v1
+metadata:
+  name: jenkins
+  labels:
+    name: jenkins
+    role: frontend
+spec:
+  ports:
+  - name: ui
+    port: 8080
+    targetPort: jenkins-http
+    protocol: TCP
+  - name: discovery
+    port: 50000
+    targetPort: jenkins-disco
+    protocol: TCP
+  selector:
+    name: jenkins
+    role: leader
