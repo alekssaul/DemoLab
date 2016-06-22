@@ -61,6 +61,8 @@ spec:
             name: docker-tmp
           - mountPath: /lib/x86_64-linux-gnu/libdevmapper.so.1.02
             name: libdevmapper
+          - mountPath: /root
+            name: dockercfg
       volumes:
         - name: jenkins
           hostPath:
@@ -80,3 +82,6 @@ spec:
         - name: libdevmapper
           hostPath:
             path: /lib64/libdevmapper.so.1.02
+        - name: dockercfg
+          secret:
+            secretName: aleks-saul-jenkins-pull-secret

@@ -20,6 +20,7 @@ metadata:
     name: jenkins
     role: frontend
 spec:
+  type: LoadBalancer
   ports:
   - name: ui
     port: 8080
