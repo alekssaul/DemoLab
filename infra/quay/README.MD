@@ -2,7 +2,7 @@
 ```shell
 MYSQL_VOLUME=/opt/docker/mysql
 QUAY_STORAGE=/opt/docker/quay/storage
-QUAY_CONFIG=/opt/docker/quay/storage
+QUAY_CONFIG=/opt/docker/quay/config
 ```
 
 # Variables for MySQL runtime
@@ -38,7 +38,7 @@ sudo docker run -d -p 6379:6379 quay.io/quay/redis
 
 # Modify Dockercfg file with pull secret
 ```shell
-vi .dockercfg & 
+vi .dockercfg 
 ```
 
 # Run Quay
