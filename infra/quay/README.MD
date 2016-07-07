@@ -18,9 +18,9 @@ MYSQL_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | sed 1q)
 ```shell
 sudo mkdir -p $MYSQL_VOLUME $QUAY_STORAGE $QUAY_CONFIG
 
-docker pull mysql:5.7
+sudo docker pull mysql:5.7
 
-docker \
+sudo docker \
   run \
   --detach \
   --env MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
@@ -48,6 +48,32 @@ sudo cp .dockercfg /root/.dockercfg
 
 sudo docker pull quay.io/coreos/registry:v1.16.3
 sudo docker run --restart=always -p 443:443 -p 80:80 --privileged=true -v $QUAY_CONFIG:/conf/stack -v $QUAY_STORAGE:/datastorage -d quay.io/coreos/registry:v1.16.3
-```shell
+```
 
 # Clair Setup
+Clair Variables
+``` shell
+PSQL_VOLUME=/opt/docker/psql
+CLAIR_CONFIG=/opt/docker/clair/config
+```
+
+Create a Postgres DB
+
+``` shell
+sudo mkdir -p $PSQL_VOLUME
+docker run --name postgres -p 5432:5432 -v PSQL_VOLUME:/var/lib/postgresql/data -d postgres 
+sleep 5
+docker run --rm --link postgres:postgres postgres sh -c 'echo "create database clairtest" | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
+``` 
+
+# Clair Config
+Edit Clair config.yaml; https://tectonic.com/quay-enterprise/docs/1.16.0/clair.html
+``` shell
+sudo mkdir -p $CLAIR_CONFIG
+sudo vi $CLAIR_CONFIG/config.yaml
+```
+
+Run Clair
+``` shell
+sudo docker run --restart=always -p 6060:6060 -p 6061:6061 -v $CLAIR_CONFIG:/config quay.io/coreos/clair-jwt:v1.2.2
+```
