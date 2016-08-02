@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: jenkins-builder
-        image: gcr.io/cloud-solutions-images/jenkins-packer-agent:master-1f6b3f6
+        image: quay.io/aleks_saul/jenkins-packer-agent:dockercfg
         resources:
           limits:
             memory: "256Mi"
@@ -84,4 +84,4 @@ spec:
             path: /lib64/libdevmapper.so.1.02
         - name: dockercfg
           secret:
-            secretName: aleks-saul-jenkins-pull-secret
+            secretName: jenkins-pull-secret

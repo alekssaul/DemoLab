@@ -9,6 +9,7 @@ spec:
     - port: 80
       protocol: TCP
       name: tectonic-console-expose
+      targetPort: 9000
   selector:
     tectonic-app: console
     tectonic-component: ui
