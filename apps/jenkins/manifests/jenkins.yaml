@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: jenkins
-        image: quay.io/aleks_saul/jenkins-gcp-leader:master
+        image: quay.io/aleks_saul/jenkins-gcp-leader:v0.1
         resources:
           limits:
             memory: "1Gi"
