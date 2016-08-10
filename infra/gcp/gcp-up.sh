@@ -1,6 +1,6 @@
 #!/bin/bash
 echo `date` - Checking for requirements ...
-	if [[ $(gcloud) ]]; then
+	if [[ $(which gcloud) ]]; then
 		echo `date` - 	'	Found gcloud binary'
 	else 
 		echo `date` - ERROR: Could Not Found gcloud binary
