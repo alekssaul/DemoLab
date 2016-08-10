@@ -84,4 +84,4 @@ spec:
             path: /lib64/libdevmapper.so.1.02
         - name: dockercfg
           secret:
-            secretName: aleks-saul-jenkins-pull-secret
+            secretName: jenkins-pull-secret
