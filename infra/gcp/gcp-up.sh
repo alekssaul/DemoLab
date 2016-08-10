@@ -1,4 +1,12 @@
 #!/bin/bash
+echo `date` - Checking for requirements ...
+	if [[ $(gcloud) ]]; then
+		echo `date` - 	'	Found gcloud binary'
+	else 
+		echo `date` - ERROR: Could Not Found gcloud binary
+		exit ;
+	fi
+
 
 echo `date` - Starting Kubernetes on GCP Install ...
 	gcloudzone=$(gcloud config list | grep zone | awk '{print $3}')
