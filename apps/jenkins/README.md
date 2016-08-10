@@ -2,7 +2,7 @@
 
 Make sure to create persistent disk for Jenkins
 ```
-gcloud compute disks create jenkins-home
+gcloud compute disks create jenkins-data-disk
 ```
 
 Create Jenkins namespace, secrets, replication controllers and services.
