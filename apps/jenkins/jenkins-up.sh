@@ -3,9 +3,11 @@ set -e
 
 JENKINSNAMESPACE=jenkins
 JENKINSRESTORE=YES
-JENKINSRESTORELOCATION=
+JENKINSRESTORELOCATION=/tmp/jenkins-home.tar.gz
 JENKINSDISK=jenkins-home
 KUBEMASTER=kubernetes-master
+GCLOUDSTORAGE=asaul-jenkins
+JENKINSBACKUP=jenkins-home.tar.gz
 
 echo `date` - Setting up Jenkins ...
 if [ DemoLab_Infra=="gcp" ]; then
@@ -18,7 +20,9 @@ if [ DemoLab_Infra=="gcp" ]; then
 fi
 
 if [ -z "$JENKINSRESTORE" ]; then
-		echo `date` - Restoring Jenkins from $JENKINSRESTORELOCATION
+	echo `date` - Downloading Jenkins from $GCLOUDSTORAGE 
+	gsutil cp gs://$GCLOUDSTORAGE/$JENKINSBACKUP $JENKINSRESTORELOCATION	
+	echo `date` - Uploading Jenkins Data to Kubernetes
 fi
 
 echo `date` - Creating Jenkins assets ...
