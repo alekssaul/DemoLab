@@ -9,12 +9,12 @@
 
 ## Getting Started
 
-`infra_gcp_up.sh` script uses Google's way of setting up Kubernetes cluster with environmental variables provided to facilitate installation of CoreOS and sizing decisions based on my preferances
+`gcp_up.sh` script uses Google's way of setting up Kubernetes cluster with environmental variables provided to facilitate installation of CoreOS and sizing decisions based on my preferances
 
 ### Start Cluster
 
 ```
-infra_gcp_up.sh
+gcp_up.sh
 ```
 
 ### Kill Cluster
