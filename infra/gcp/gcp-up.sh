@@ -1,4 +1,7 @@
 #!/bin/bash
+KUBERNETESFETCH=Y
+KUBERNETESLOCATION=$HOME/dev/workspace/kubernetes
+
 echo `date` - Checking for requirements ...
 	if [[ $(which gcloud) ]]; then
 		echo `date` - 	'	Found gcloud binary'
@@ -19,6 +22,11 @@ echo `date` - Starting Kubernetes on GCP Install ...
 	export KUBE_ENABLE_CLUSTER_MONITORING=googleinfluxdb
 	export KUBECTL_BIN=/opt/kubernetes/server/bin/kubectl
 
+if [ "$KUBERNETESFETCH" == "Y" ] && [ -e $KUBERNETESLOCATION ]; then
+	echo `date` - Using Local Kubernetes Source $KUBERNETESLOCATION  ...
+	$KUBERNETESLOCATION/cluster/kube-up.sh
+else
 	pushd /tmp
 	curl -sS https://get.k8s.io | bash
 	popd 
+fi
