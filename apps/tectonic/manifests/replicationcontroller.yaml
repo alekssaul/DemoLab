@@ -10,21 +10,21 @@ metadata:
   labels:
     tectonic-app: console
     tectonic-component: ui
-    tectonic-version: v0.1.9
-  name: tectonic-console-v0.1.9
+    tectonic-version: v0.2.0
+  name: tectonic-console-v0.2.0
 spec:
   replicas: 1
   selector:
     tectonic-app: console
     tectonic-component: ui
-    tectonic-version: v0.1.9
+    tectonic-version: v0.2.0
   template:
     metadata:
       labels:
         tectonic-app: console
         tectonic-component: ui
-        tectonic-version: v0.1.9
-      name: tectonic-console-v0.1.9
+        tectonic-version: v0.2.0
+      name: tectonic-console-v0.2.0
     spec:
       containers:
         - command:
@@ -41,10 +41,10 @@ spec:
             - name: BRIDGE_PUBLIC_DIR
               value: /opt/bridge/static
             - name: BRIDGE_TECTONIC_VERSION
-              value: v0.1.9
+              value: v0.2.0
             - name: BRIDGE_IDENTITY_FILE
               value: /etc/coreos-pull-secret/.dockercfg
-          image: quay.io/coreos/tectonic-console:v0.1.9
+          image: quay.io/coreos/tectonic-console:v0.2.0
           name: tectonic-console
           ports:
             - containerPort: 9000
