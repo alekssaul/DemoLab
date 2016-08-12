@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Quay Enterprise 
 
 ## MySQL
@@ -20,7 +19,7 @@ MYSQL_VOLUME=/opt/docker/mysql
 ```
 
 Setup Variables for MySQL runtime
->>>>>>> 4f6dce3df95fe5c4e9f8e8bbf22b27504baed628
+
 ```shell
 MYSQL_USER="coreosuser"
 MYSQL_DATABASE="enterpriseregistrydb"
@@ -29,13 +28,13 @@ MYSQL_ROOT_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | sed 1
 MYSQL_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | sed 1q)
 ```
 
-<<<<<<< HEAD
+
 Start MySQL requirements
 ```shell
 =======
 Start MySQL
 ```
->>>>>>> 4f6dce3df95fe5c4e9f8e8bbf22b27504baed628
+
 sudo mkdir -p $MYSQL_VOLUME
 
 sudo docker pull mysql:5.7
@@ -69,11 +68,9 @@ sudo docker pull quay.io/quay/redis
 sudo docker run -d -p 6379:6379 quay.io/quay/redis
 ```
 
-<<<<<<< HEAD
 ## Quay Enterprise
 
 =======
->>>>>>> 4f6dce3df95fe5c4e9f8e8bbf22b27504baed628
 Modify Dockercfg file with pull secret
 ```shell
 vi .dockercfg 
@@ -88,7 +85,7 @@ sudo mkdir -p  $QUAY_STORAGE $QUAY_CONFIG
 ```
 
 =======
->>>>>>> 4f6dce3df95fe5c4e9f8e8bbf22b27504baed628
+
 Run Quay
 ```shell
 cp .dockercfg ~/
@@ -114,10 +111,10 @@ sleep 5
 docker run --rm --link postgres:postgres postgres sh -c 'echo "create database clairtest" | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
 ``` 
 
-<<<<<<< HEAD
+
 =======
 Clair Config
->>>>>>> 4f6dce3df95fe5c4e9f8e8bbf22b27504baed628
+
 Edit Clair config.yaml; https://tectonic.com/quay-enterprise/docs/1.16.0/clair.html
 ``` shell
 sudo mkdir -p $CLAIR_CONFIG
