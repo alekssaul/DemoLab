@@ -2,18 +2,7 @@
 
 ## MySQL
 Setup Variables for persistent storage, these will be mounted on the local host
-```shell
-MYSQL_VOLUME=/opt/docker/mysql
 
-```
-
- Variables for MySQL runtime
-=======
-# QUAY Enterprise SE Notes
-
-# MYSQL 
-
-Setup Variables for persistent storage, these will be mounted on the local host
 ```shell
 MYSQL_VOLUME=/opt/docker/mysql
 ```
@@ -28,13 +17,9 @@ MYSQL_ROOT_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | sed 1
 MYSQL_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | sed 1q)
 ```
 
-
 Start MySQL requirements
-```shell
-=======
-Start MySQL
-```
 
+```shell
 sudo mkdir -p $MYSQL_VOLUME
 
 sudo docker pull mysql:5.7
@@ -52,39 +37,26 @@ sudo docker \
   mysql:5.7;
 ```
 
-<<<<<<< HEAD
+
 ## Redis
-```
-=======
-# Quay Enterprise
 ```shell
-
-QUAY_STORAGE=/opt/docker/quay/storage
-QUAY_CONFIG=/opt/docker/quay/config
-
-sudo mkdir -p $QUAY_STORAGE $QUAY_CONFIG
->>>>>>> 4f6dce3df95fe5c4e9f8e8bbf22b27504baed628
 sudo docker pull quay.io/quay/redis
 sudo docker run -d -p 6379:6379 quay.io/quay/redis
 ```
 
 ## Quay Enterprise
 
-=======
 Modify Dockercfg file with pull secret
 ```shell
 vi .dockercfg 
 ```
 
-<<<<<<< HEAD
 Create Quay paths
-```
+```shell
 QUAY_STORAGE=/opt/docker/quay/storage
 QUAY_CONFIG=/opt/docker/quay/config
 sudo mkdir -p  $QUAY_STORAGE $QUAY_CONFIG
 ```
-
-=======
 
 Run Quay
 ```shell
@@ -97,14 +69,14 @@ sudo docker run --restart=always -p 443:443 -p 80:80 --privileged=true -v $QUAY_
 
 ## Clair 
 Clair Variables
-``` shell
+```shell
 PSQL_VOLUME=/opt/docker/psql
 CLAIR_CONFIG=/opt/docker/clair/config
 ```
 
 ## Create a Postgres DB
 
-``` shell
+```shell
 sudo mkdir -p $PSQL_VOLUME
 docker run --name postgres -p 5432:5432 -v PSQL_VOLUME:/var/lib/postgresql/data -d postgres 
 sleep 5
@@ -112,16 +84,15 @@ docker run --rm --link postgres:postgres postgres sh -c 'echo "create database c
 ``` 
 
 
-=======
 Clair Config
 
 Edit Clair config.yaml; https://tectonic.com/quay-enterprise/docs/1.16.0/clair.html
-``` shell
+```shell
 sudo mkdir -p $CLAIR_CONFIG
 sudo vi $CLAIR_CONFIG/config.yaml
 ```
 
 ## Run Clair
-``` shell
+```shell
 sudo docker run --restart=always -p 6060:6060 -p 6061:6061 -v $CLAIR_CONFIG:/config quay.io/coreos/clair-jwt:v1.2.2
 ```
