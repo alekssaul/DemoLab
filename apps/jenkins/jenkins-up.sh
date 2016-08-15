@@ -16,18 +16,19 @@ if [ DemoLab_Infra=="gcp" ]; then
 	gcloud compute disks create $JENKINSDISK --size 20GB 2> /dev/stdout 1> /dev/null 
 	gcloud compute instances attach-disk $KUBEMASTER --disk $JENKINSDISK --device-name jenkins-home 2> /dev/stdout 1> /dev/null 
 	gcloud compute copy-files `dirname $0`/scripts core@$KUBEMASTER:~/ 2> /dev/stdout 1> /dev/null 
-	gcloud compute ssh core@$KUBEMASTER --command "~/scripts/prepare-jenkins-data.sh"
+	
 	if [ "$JENKINSRESTORE" == "true" ]; then		
 		echo `date` - Restoring  Jenkins from $GCLOUDSTORAGE 
+		echo `date` - Calling \"scripts/prepare-jenkins-data.sh $JENKINSRESTORE $GCLOUDSTORAGE $JENKINSBACKUPFILE $JENKINSRESTORELOCATION\"
 		gcloud compute ssh core@$KUBEMASTER --command "source ~/scripts/prepare-jenkins-data.sh $JENKINSRESTORE $GCLOUDSTORAGE $JENKINSBACKUPFILE $JENKINSRESTORELOCATION"
 		#gcloud compute ssh core@kubernetes-master --command "source gsutil cp gs://$GCLOUDSTORAGE/$JENKINSBACKUPFILE $JENKINSRESTORELOCATION"
 		#JENKINSKUBELOCATION=$(gcloud compute ssh core@kubernetes-master --command "sudo find / | grep jenkins-home.tar.gz")
 		#tar -zxvf $JENKINSKUBELOCATION -C /mnt/jenkins-home/		
 	else 
+		
 		gcloud compute ssh core@$KUBEMASTER --command "~/scripts/prepare-jenkins-data.sh"
 	fi
-	exit
-	
+
 	gcloud compute instances detach-disk $KUBEMASTER --disk jenkins-home 2> /dev/stdout 1> /dev/null
 fi
 

@@ -3,7 +3,7 @@ set -e
 
 JENKINSNAMESPACE=${JENKINSNAMESPACE:-jenkins}
 JENKINSDISK=${JENKINSDISK:-jenkins-home}
-JENKINSBACKUP=${JENKINSBACKUP:-jenkins-home.tar.gz}
+JENKINSBACKUPFILE=${JENKINSBACKUPFILE:-jenkins-home.tar.gz}
 KUBEMASTER=${KUBEMASTER:-kubernetes-master}
 GCLOUDSTORAGE=${GCLOUDSTORAGE:-asaul-jenkins}
 JENKINSBACKUP=${JENKINSBACKUP:-true}
@@ -19,15 +19,16 @@ kubectl --namespace=$JENKINSNAMESPACE delete svc jenkins
 if [ "$JENKINSBACKUP" == "true"  ]; then
 	echo `date` - Backup up Jenkins ...
 	gcloud compute instances attach-disk $KUBEMASTER --disk $JENKINSDISK --device-name jenkins-home 2> /dev/stdout 1> /dev/null 
-	gcloud compute ssh core@$KUBEMASTER --command "sudo mkdir -p /mnt/jenkins-home"
-	gcloud compute ssh core@$KUBEMASTER --command "sudo mount -o discard,defaults /dev/disk/by-id/google-$JENKINSDISK /mnt/jenkins-home"
-	gcloud compute ssh core@$KUBEMASTER --command "sudo tar -zcvf /tmp/$JENKINSBACKUP /mnt/jenkins-home"
-	echo `date` - Uploading Jenkins Backup to $GCLOUDSTORAGE 
-	gcloud compute ssh core@KUBEMASTER --command "gsutil cp /tmp/$JENKINSBACKUP gs://$GCLOUDSTORAGE/$JENKINSBACKUP"				
-fi
+	gcloud compute ssh core@$KUBEMASTER --command "sudo mkdir -p /mnt/jenkins-home" 2> /dev/stdout 1> /dev/null 
+	gcloud compute ssh core@$KUBEMASTER --command "sudo mount -o discard,defaults /dev/disk/by-id/google-$JENKINSDISK /mnt/jenkins-home" 2> /dev/stdout 1> /dev/null 
+	gcloud compute ssh core@$KUBEMASTER --command "pushd /mnt/jenkins-home && sudo tar -zcvf /tmp/$JENKINSBACKUPFILE ./ && popd" 2> /dev/stdout 1> /dev/null 
 
-gcloud compute ssh core@$KUBEMASTER --command "sudo umount /mnt/jenkins-home"
-gcloud compute instances detach-disk $KUBEMASTER --disk $JENKINSDISK  2> /dev/stdout 1> /dev/null 
+	echo `date` - Uploading Jenkins Backup to $GCLOUDSTORAGE 
+	gcloud compute ssh core@$KUBEMASTER --command "docker run -i --net=host -v /home/core/.config:/.config -v /tmp:/tmp  google/cloud-sdk gsutil cp /tmp/$JENKINSBACKUPFILE gs://$GCLOUDSTORAGE/$JENKINSBACKUPFILE"
+
+	gcloud compute ssh core@$KUBEMASTER --command "sudo umount /mnt/jenkins-home"
+	gcloud compute instances detach-disk $KUBEMASTER --disk $JENKINSDISK  2> /dev/stdout 1> /dev/null 
+fi
 
 echo `date` - Deleting $JENKINSDISK ...
 gcloud compute disks delete $JENKINSDISK -q 2> /dev/stdout 1> /dev/null 
