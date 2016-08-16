@@ -15,10 +15,3 @@ spec:
       - name: webhook
         image: quay.io/aleks_saul/webhook:master
         imagePullPolicy: Always
-        volumeMounts:
-        - name: kubeconfig
-          mountPath: /usr/local/share/kubeconfig/
-      volumes:
-      - name: kubeconfig
-        configMap:
-          name: kubeconfig
