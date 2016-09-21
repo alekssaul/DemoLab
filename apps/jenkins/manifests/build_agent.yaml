@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: jenkins-builder
-        image: quay.io/aleks_saul/jenkins-packer-agent:v0.1.1
+        image: quay.io/aleks_saul/jenkins-packer-agent:v0.1.2
         resources:
           limits:
             memory: "256Mi"
