@@ -1,11 +1,9 @@
 #!/bin/bash
 
 # get default variables
+echo `date` - Setting up configuration
 ./configure.sh
 
-export DemoLab_Infra=gcp
-
-# env | grep DemoLab_apps
 
 echo `date` - Starting Tectonic Down ...
 ./apps/tectonic/tectonic-down.sh
@@ -16,5 +14,13 @@ echo `date` - Starting Jenkins Down ...
 echo `date` - Starting Webhook Down ...
 ./apps/webhook/webhook-down.sh
 
-echo `date` - Calling GCP Down ...
-./infra/gcp/gcp-down.sh
+case $DemoLab_Infra in
+	"gcp")
+		echo `date` - Calling GCP Down ...
+		./infra/gcp/gcp-down.sh ;;
+	"aws")
+		./infra/aws/aws-down.sh ;;	
+	*) 
+		echo `date` - Unsupported hook recieved ;;
+esac
+
