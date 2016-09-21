@@ -14,3 +14,5 @@ if [ $DemoLab_Infra="gcp" ]; then
 	export AUTOSCALER_MAX_NODES=5
 fi 
 
+# Jenkins
+JENKINSBACKUP=${JENKINSBACKUP:-false}
