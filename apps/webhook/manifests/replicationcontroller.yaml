@@ -12,6 +12,11 @@ spec:
         app: webhook        
     spec:
       containers:
-      - name: webhook
-        image: quay.io/aleks_saul/webhook:master
+      - env: 
+            - name: Github_BOTUSER
+              value: botofalekssaul
+            - name: Github_BOTPassword
+              value: d2UMc78nDDrErycu
+        name: webhook
+        image: quay.io/aleks_saul/webhook:v0.3
         imagePullPolicy: Always
