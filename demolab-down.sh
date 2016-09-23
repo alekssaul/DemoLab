@@ -2,25 +2,24 @@
 
 # get default variables
 echo `date` - Setting up configuration
-./configure.sh
+source ./configure.sh
 
+echo `date` - Removing Applications
+applications=$(env | grep DemoLab_SETUP | grep true)
 
-echo `date` - Starting Tectonic Down ...
-./apps/tectonic/tectonic-down.sh
+for app in $Applications ; do 
+	./app/$app/$app-down.sh; 
+done
 
-echo `date` - Starting Jenkins Down ...
-./apps/jenkins/jenkins-down.sh
-
-echo `date` - Starting Webhook Down ...
-./apps/webhook/webhook-down.sh
-
+echo `date` - Destroying Kubernetes Cluster
 case $DemoLab_Infra in
-	"gcp")
-		echo `date` - Calling GCP Down ...
+	"gcp")		
 		./infra/gcp/gcp-down.sh ;;
 	"aws")
 		./infra/aws/aws-down.sh ;;	
 	*) 
-		echo `date` - Unsupported hook recieved ;;
+		echo `date` - Infrastructure type not set
+		exit 1 ;;
 esac
 
+echo `date` - Done
