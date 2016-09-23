@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e 
-
 TECTONICNAMESPACE=${TECTONICNAMESPACE:-tectonic-system}
 
+echo `date` - Executing $0 ...
 
-echo `date` - Removing tectonic  ...
 kubectl --namespace=$TECTONICNAMESPACE delete svc tectonic-console-public
 kubectl delete namespace $TECTONICNAMESPACE
+
+echo `date` - Finished Executing $0 
