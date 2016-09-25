@@ -1,4 +1,2 @@
 secrets/
-infra/aws/cluster/credentials/
-infra/aws/cluster/userdata/
-infra/aws/cluster/cluster.yaml
+infra/aws/cluster/

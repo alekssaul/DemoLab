@@ -1,4 +1,4 @@
 #!/bin/bash
-echo `date` - Modifying AWS manifests for Torus ...
+echo `date` - Executing $0 ...
 
-echo `date` - To be implmented later
+echo `date` - Finished Executing $0 

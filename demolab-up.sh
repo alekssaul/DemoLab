@@ -3,6 +3,7 @@
 # get default variables
 echo `date` - Setting up configuration
 source ./configure.sh
+source secrets/secrets.sh
 
 echo `date` - Starting Kubernetes Cluster
 case $DemoLab_Infra in
@@ -15,11 +16,14 @@ case $DemoLab_Infra in
 		exit 1 ;;
 esac
 
+exit
+
 echo `date` - Deploying Applications
-applications=$(env | grep DemoLab_SETUP | grep true)
+applications=$(env | grep DemoLab_SETUP_ | grep true)
 
 for app in $Applications ; do 
-	./app/$app/$app-up.sh; 
+	appname=$(echo $app | awk -F '[_=]' '{print $3}' |  tr '[:upper:]' '[:lower:]')
+	./apps/$appname/$appname-up.sh; 
 done
 
 echo `date` - Done
