@@ -47,12 +47,12 @@ aws elb configure-health-check \
 
 aws ec2 authorize-security-group-ingress \
 	--group-id $sggroup \
-	---cidr 0.0.0.0/0 \
+	--cidr 0.0.0.0/0 \
 	--protocol tcp --port 32000
 
 aws ec2 authorize-security-group-ingress \
 	--group-id $sggroup \
-	---cidr 0.0.0.0/0 \
+	--cidr 0.0.0.0/0 \
 	--protocol tcp --port 32001
 
 echo `date` - Finished creating ELB and modifying settings
