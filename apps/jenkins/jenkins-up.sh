@@ -10,7 +10,8 @@ KUBEMASTER=${KUBEMASTER:-kubernetes-master}
 GCLOUDSTORAGE=${GCLOUDSTORAGE:-asaul-jenkins}
 JENKINSBACKUPFILE=${JENKINSBACKUPFILE:-jenkins-home.tar.gz}
 
-echo `date` - Setting up Jenkins ...
+echo `date` - Executing $0 ...
+
 if [ DemoLab_Infra=="gcp" ]; then
 	echo `date` - Creating $JENKINSDISK on GCP ...
 	gcloud compute disks create $JENKINSDISK --size 20GB 2> /dev/stdout 1> /dev/null 
@@ -20,12 +21,8 @@ if [ DemoLab_Infra=="gcp" ]; then
 	if [ "$JENKINSRESTORE" == "true" ]; then		
 		echo `date` - Restoring  Jenkins from $GCLOUDSTORAGE 
 		echo `date` - Calling \"scripts/prepare-jenkins-data.sh $JENKINSRESTORE $GCLOUDSTORAGE $JENKINSBACKUPFILE $JENKINSRESTORELOCATION\"
-		gcloud compute ssh core@$KUBEMASTER --command "source ~/scripts/prepare-jenkins-data.sh $JENKINSRESTORE $GCLOUDSTORAGE $JENKINSBACKUPFILE $JENKINSRESTORELOCATION"
-		#gcloud compute ssh core@kubernetes-master --command "source gsutil cp gs://$GCLOUDSTORAGE/$JENKINSBACKUPFILE $JENKINSRESTORELOCATION"
-		#JENKINSKUBELOCATION=$(gcloud compute ssh core@kubernetes-master --command "sudo find / | grep jenkins-home.tar.gz")
-		#tar -zxvf $JENKINSKUBELOCATION -C /mnt/jenkins-home/		
-	else 
-		
+		gcloud compute ssh core@$KUBEMASTER --command "source ~/scripts/prepare-jenkins-data.sh $JENKINSRESTORE $GCLOUDSTORAGE $JENKINSBACKUPFILE $JENKINSRESTORELOCATION"		
+	else 		
 		gcloud compute ssh core@$KUBEMASTER --command "~/scripts/prepare-jenkins-data.sh"
 	fi
 
@@ -36,3 +33,5 @@ echo `date` - Creating Jenkins assets ...
 kubectl create namespace $JENKINSNAMESPACE 2> /dev/stdout 1> /dev/null
 kubectl create --namespace=$JENKINSNAMESPACE secret generic jenkins-pull-secret --from-file=$JENKINSPULLSECRET 2> /dev/stdout 1> /dev/null
 kubectl create --namespace=$JENKINSNAMESPACE -f `dirname $0`/manifests 2> /dev/stdout 1> /dev/null
+
+echo `date` - Finished Executing $0 

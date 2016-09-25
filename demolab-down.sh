@@ -3,12 +3,14 @@
 # get default variables
 echo `date` - Setting up configuration
 source ./configure.sh
+source secrets/secrets.sh
 
 echo `date` - Removing Applications
-applications=$(env | grep DemoLab_SETUP | grep true)
+applications=$(env | grep DemoLab_SETUP_ | grep true)
 
 for app in $Applications ; do 
-	./app/$app/$app-down.sh; 
+	appname=$(echo $app | awk -F '[_=]' '{print $3}' |  tr '[:upper:]' '[:lower:]')
+	./apps/$appname/$appname-down.sh; 
 done
 
 echo `date` - Destroying Kubernetes Cluster
