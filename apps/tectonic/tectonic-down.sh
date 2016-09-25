@@ -15,7 +15,7 @@ else
 	kubeconfig=$HOME/.kube/config
 fi
 
-kubectl --kubeconfig=kubeconfig --namespace=$TECTONICNAMESPACE delete svc tectonic-console-public
-kubectl --kubeconfig=kubeconfig delete namespace $TECTONICNAMESPACE
+kubectl --kubeconfig=$kubeconfig --namespace=$TECTONICNAMESPACE delete svc tectonic-console-public
+kubectl --kubeconfig=$kubeconfig delete namespace $TECTONICNAMESPACE
 
 echo `date` - Finished Executing $0 
