@@ -7,6 +7,15 @@ AWS_CLUSTER_AZ=${AWS_CLUSTER_AZ:-us-west-1c}
 AWS_CLUSTER_region=${AWS_CLUSTER_region:-us-west-1}
 export AWS_DEFAULT_REGION=$AWS_CLUSTER_region
 
+echo `date` - Checking for requirements ...
+	if [[ $(which aws) ]]; then
+		echo `date` - Found AWS CLI binary
+	else 
+		echo `date` - ERROR: Could Not Found AWS CLI binary
+		exit 1 ;
+	fi
+
+
 # get Information from Cloud formation
 vpcid=$(aws cloudformation describe-stack-resources --stack-name $AWS_CLUSTER_name | \
 	jq '.StackResources[] | select (.ResourceType == "AWS::EC2::VPC")' | jq '.PhysicalResourceId' | tr -d '"')
