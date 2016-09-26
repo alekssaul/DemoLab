@@ -16,6 +16,8 @@ case $DemoLab_Infra in
 		exit 1 ;;
 esac
 
+./apps/tectonic/tectonic-up.sh
+
 exit
 
 echo `date` - Deploying Applications

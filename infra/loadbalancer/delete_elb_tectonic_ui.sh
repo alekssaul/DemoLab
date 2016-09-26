@@ -11,16 +11,16 @@ sggroup=$(aws cloudformation describe-stack-resources --stack-name $AWS_CLUSTER_
 	jq '.StackResources[] | select (.LogicalResourceId == "SecurityGroupWorker")' | jq '.PhysicalResourceId' | tr -d '"')
 
 aws elb delete-load-balancer \
-	--load-balancer-name $AWS_CLUSTER_name-tectonic
+	--load-balancer-name $AWS_CLUSTER_name-tectonic 2> /dev/stdout 1> /dev/null
 
 aws ec2 revoke-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32000
+	--protocol tcp --port 32000 2> /dev/stdout 1> /dev/null
 
 aws ec2 revoke-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32001
+	--protocol tcp --port 32001 2> /dev/stdout 1> /dev/null
 
 echo `date` - Finished Executing $0

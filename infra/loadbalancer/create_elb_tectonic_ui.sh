@@ -39,21 +39,21 @@ tectonicelbname=$(aws elb describe-load-balancers | jq '.LoadBalancerDescription
 
 aws elb register-instances-with-load-balancer \
 	--load-balancer-name $tectonicelbname \
-	--instances $workerinstanceids
+	--instances $workerinstanceids 2> /dev/stdout 1> /dev/null 
 
 aws elb configure-health-check \
 	--load-balancer-name $tectonicelbname \
-	--health-check Target=HTTPS:32001/health,Interval=30,Timeout=5,UnhealthyThreshold=2,HealthyThreshold=10
+	--health-check Target=HTTPS:32001/health,Interval=30,Timeout=5,UnhealthyThreshold=2,HealthyThreshold=2 2> /dev/stdout 1> /dev/null
 
 aws ec2 authorize-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32000
+	--protocol tcp --port 32000 2> /dev/stdout 1> /dev/null 
 
 aws ec2 authorize-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32001
+	--protocol tcp --port 32001 2> /dev/stdout 1> /dev/null
 
 echo `date` - Finished creating ELB and modifying settings
 

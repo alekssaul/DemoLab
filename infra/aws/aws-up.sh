@@ -55,7 +55,7 @@ fi
 echo `date` - Executing kube-aws up
 kube-aws up
 
-kubeconfig=`dirname $0`/cluster/kubeconfig
+kubeconfig=$DemoLab_RootFolder/infra/aws/cluster/kubeconfig
 
 controllerIP=$(kube-aws status | grep Controller | awk '{print $3}')
 
@@ -64,7 +64,7 @@ read -n1 -r -p "Press any key to continue..." key
 
 echo `date` - Waiting for kubectl connectivity to Kubernetes ... 
 etcdhealth="false"
-until [ $etcdhealth == "true" ]; do 
+until [ "$etcdhealth" == "true" ]; do 
 	etcdhealth=$(kubectl --kubeconfig=$kubeconfig get cs | grep etcd | awk '{print $4}' | tr -d '"' | tr -d '}')
 	sleep 60
 done
