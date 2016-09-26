@@ -16,6 +16,7 @@ if [ $DemoLab_Infra="gcp" ]; then
 	export AUTOSCALER_MAX_NODES=5
 fi 
 
+<<<<<<< HEAD
 ### Variables for AWS
 if [ $DemoLab_Infra="aws" ]; then
 	export AWS_CLUSTER_DNS=tectonic.alekssaul.com
@@ -51,3 +52,7 @@ if [ $DemoLab_SETUP_JENKINS="true" ]; then
 	GCLOUDSTORAGE=asaul-jenkins
 	JENKINSBACKUPFILE=jenkins-home.tar.gz
 fi
+=======
+# Jenkins
+JENKINSBACKUP=${JENKINSBACKUP:-false}
+>>>>>>> 3640fb95a6ffd16a1141c790a181364faf398ab9
