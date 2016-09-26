@@ -1,20 +1,29 @@
 #!/bin/bash
 
 # get default variables
-./configure.sh
+echo `date` - Setting up configuration
+source ./configure.sh
+source secrets/secrets.sh
 
-export DemoLab_Infra=gcp
+echo `date` - Starting Kubernetes Cluster
+case $DemoLab_Infra in
+	"gcp")		
+		./infra/gcp/gcp-up.sh ;;
+	"aws")
+		./infra/aws/aws-up.sh ;;	
+	*) 
+		echo `date` - Infrastructure type not set
+		exit 1 ;;
+esac
 
-# env | grep DemoLab_apps
+exit
 
-echo `date` - Calling GCP Up ...
-./infra/gcp/gcp-up.sh
+echo `date` - Deploying Applications
+applications=$(env | grep DemoLab_SETUP_ | grep true)
 
-echo `date` - Starting Tectonic Up ...
-./apps/tectonic/tectonic-up.sh
+for app in $Applications ; do 
+	appname=$(echo $app | awk -F '[_=]' '{print $3}' |  tr '[:upper:]' '[:lower:]')
+	./apps/$appname/$appname-up.sh; 
+done
 
-echo `date` - Starting Webhook Up ...
-./apps/webhook/webhook-up.sh
-
-echo `date` - Starting Jenkins Up ...
-./apps/jenkins/jenkins-up.sh
+echo `date` - Done
