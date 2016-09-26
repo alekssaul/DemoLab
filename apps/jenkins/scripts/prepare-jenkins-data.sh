@@ -6,7 +6,8 @@ sudo mkdir /mnt/jenkins-home 2> /dev/stdout 1> /dev/null
 sudo mount -o discard,defaults /dev/disk/by-id/google-jenkins-home /mnt/jenkins-home 2> /dev/stdout 1> /dev/null 
 
 if [ "$1" == "true" ]; then
-	echo `date` - Restoring Jenkins data from gs://$2/$3	
+	echo `date` - Restoring Jenkins data from gs://$2/$3
+	docker pull google/cloud-sdk 2> /dev/stdout 1> /dev/null 
 	docker run -i --net=host -v /home/core/.config:/.config -v /tmp:/tmp  google/cloud-sdk gsutil cp gs://$2/$3 $4 2> /dev/stdout 1> /dev/null 
 	echo `date` - Extracting data into jenkins home drive
 	sudo tar -zxvf $4 -C /mnt/jenkins-home/ 2> /dev/stdout 1> /dev/null 

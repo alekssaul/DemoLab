@@ -1,20 +1,27 @@
 #!/bin/bash
 
 # get default variables
-./configure.sh
+echo `date` - Setting up configuration
+source ./configure.sh
+source secrets/secrets.sh
 
-export DemoLab_Infra=gcp
+echo `date` - Removing Applications
+applications=$(env | grep DemoLab_SETUP_ | grep true)
 
-# env | grep DemoLab_apps
+for app in $Applications ; do 
+	appname=$(echo $app | awk -F '[_=]' '{print $3}' |  tr '[:upper:]' '[:lower:]')
+	./apps/$appname/$appname-down.sh; 
+done
 
-echo `date` - Starting Tectonic Down ...
-./apps/tectonic/tectonic-down.sh
+echo `date` - Destroying Kubernetes Cluster
+case $DemoLab_Infra in
+	"gcp")		
+		./infra/gcp/gcp-down.sh ;;
+	"aws")
+		./infra/aws/aws-down.sh ;;	
+	*) 
+		echo `date` - Infrastructure type not set
+		exit 1 ;;
+esac
 
-echo `date` - Starting Jenkins Down ...
-./apps/jenkins/jenkins-down.sh
-
-echo `date` - Starting Webhook Down ...
-./apps/webhook/webhook-down.sh
-
-echo `date` - Calling GCP Down ...
-./infra/gcp/gcp-down.sh
+echo `date` - Done
