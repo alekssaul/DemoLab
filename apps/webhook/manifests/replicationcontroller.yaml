@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: webhook
+spec:
+  replicas: 1
+  selector:
+    app: webhook    
+  template:
+    metadata:
+      labels:
+        app: webhook        
+    spec:
+      containers:
+      - name: webhook
+      - env: 
+            - name: Github_BOTUSER
+              value: username
+            - name: Github_BOTPassword
+              value: password
+        name: webhook
+        image: quay.io/aleks_saul/webhook:v0.3
+        imagePullPolicy: Always
