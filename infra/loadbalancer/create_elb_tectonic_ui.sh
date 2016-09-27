@@ -15,7 +15,6 @@ echo `date` - Checking for requirements ...
 		exit 1 ;
 	fi
 
-
 # get Information from Cloud formation
 vpcid=$(aws cloudformation describe-stack-resources --stack-name $AWS_CLUSTER_name | \
 	jq '.StackResources[] | select (.ResourceType == "AWS::EC2::VPC")' | jq '.PhysicalResourceId' | tr -d '"')
