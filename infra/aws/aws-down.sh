@@ -13,11 +13,11 @@ echo `date` - Checking for requirements ...
 		exit 1 ;
 	fi
 
-pushd `dirname $0`/cluster
+pushd `dirname $0`/cluster 2> /dev/stdout 1> /dev/null 
 
 echo `date` - Executing kube-aws Destroy...
 kube-aws destroy
-popd
+popd 2> /dev/stdout 1> /dev/null 
 
 echo `date` - Cleaning up the assets ...
 rm -rf $DemoLab_RootFolder/infra/aws/cluster
