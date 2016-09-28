@@ -79,7 +79,7 @@ fi
 
 echo `date` - Waiting for kubectl connectivity to Kubernetes ... 
 etcdhealth="false"
-until [ $etcdhealth == "true" ]; do 
+until [ "$etcdhealth" == "true" ]; do 
 	etcdhealth=$(kubectl --kubeconfig=$kubeconfig get cs | grep etcd | awk '{print $4}' | tr -d '"' | tr -d '}')
 	sleep 60
 done
