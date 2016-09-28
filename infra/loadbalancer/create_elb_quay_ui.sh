@@ -21,7 +21,9 @@ function create_new_elb {
 
 function modify_existing_elb {
 	echo `date` - Found existing ELB
-
+	aws elb modify-load-balancer-attributes \
+	--load-balancer-name $AWS_CLUSTER_name-tectonic \
+	--load-balancer-attributes
 }
 
 function modify_sg {

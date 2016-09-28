@@ -8,7 +8,7 @@ source secrets/secrets.sh
 echo `date` - Removing Applications
 applications=$(env | grep DemoLab_SETUP_ | grep true)
 
-for app in $Applications ; do 
+for app in $applications ; do 
 	appname=$(echo $app | awk -F '[_=]' '{print $3}' |  tr '[:upper:]' '[:lower:]')
 	./apps/$appname/$appname-down.sh; 
 done

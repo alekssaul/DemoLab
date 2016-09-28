@@ -2,11 +2,13 @@
 
 ### Main Variables
 export DemoLab_Infra=aws
-export DemoLab_SETUP_JENKINS=true
+export DemoLab_SETUP_JENKINS=false
 export DemoLab_SETUP_TECTONIC=true
-export DemoLab_SETUP_WEBHOOK=true
+export DemoLab_SETUP_WEBHOOK=false
 export DemoLab_Infra_TORUS=false
 export DemoLab_RootFolder=$PWD
+export DemoLab_GCP_DNSZone="alekssaul"
+export DemoLab_TECTONIC_Enterprise=true
 
 ### Variables for GCP
 if [ $DemoLab_Infra="gcp" ]; then
@@ -29,8 +31,7 @@ if [ $DemoLab_Infra="aws" ]; then
 fi 
 
 ### Variables for Tectonic
-if [ $DemoLab_SETUP_TECTONIC="true" ]; then
-	export DemoLab_SETUP_TECTONIC_Enterprise="true"
+if [ $DemoLab_SETUP_TECTONIC="true" ]; then	
 	export TECTONICNAMESPACE=tectonic-system
 	export TECTONIC_PULL_SECRET=$HOME/Downloads/coreos-pull-secret.yml
 fi

@@ -7,7 +7,7 @@ WEBHOOKNAMESPACE=${WEBHOOKNAMESPACE:-webhook}
 
 kubectl create namespace $WEBHOOKNAMESPACE
 
-if [[ "$DemoLab_SETUP_TECTONIC_Enterprise" == "true" ]] ; then
+if [ $DemoLab_Infra="aws" ] ; then
 	kubeconfig=$DemoLab_RootFolder/infra/aws/cluster/kubeconfig
 else
 	kubeconfig=$HOME/.kube/config

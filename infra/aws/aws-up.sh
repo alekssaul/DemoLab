@@ -4,6 +4,7 @@ AWS_CLUSTER_DNS=${AWS_CLUSTER_DNS:-tectonic.alekssaul.com}
 AWS_CLUSTER_name=${AWS_CLUSTER_name:-aleksdemo}
 AWS_CLUSTER_region=${AWS_CLUSTER_region:-us-west-1}
 AWS_CLUSTER_AZ=${AWS_CLUSTER_AZ:-us-west-1c}
+DemoLab_GCP_DNSZone=${DemoLab_GCP_DNSZone:-alekssaul}
 
 echo `date` - Checking for requirements ...
 	if [[ $(which kube-aws) ]]; then
@@ -55,12 +56,26 @@ fi
 echo `date` - Executing kube-aws up
 kube-aws up
 
-kubeconfig=`dirname $0`/cluster/kubeconfig
+kubeconfig=$DemoLab_RootFolder/infra/aws/cluster/kubeconfig
 
 controllerIP=$(kube-aws status | grep Controller | awk '{print $3}')
 
-echo `date` - Please make sure $controllerIP matches $AWS_CLUSTER_DNS
-read -n1 -r -p "Press any key to continue..." key
+# Setup DNS
+dnsrecord=$(gcloud dns record-sets list --zone=$DemoLab_GCP_DNSZone --name "$AWS_CLUSTER_DNS." | grep $AWS_CLUSTER_DNS.)
+if [[ -n $dnsrecord ]] ; then
+	echo `date` - Adding DNS Record $controllerIP to $AWS_CLUSTER_DNS in GCP DNS
+	dnsrecordtype=$(echo $dnsrecord | awk '{print $2}')
+	dnsrecordttl=$(echo $dnsrecord | awk '{print $3}')
+	dnsrecordvalue=$(echo $dnsrecord | awk '{print $4}')
+	gcloud dns record-sets transaction start --zone=$DemoLab_GCP_DNSZone 
+	gcloud dns record-sets transaction remove --zone=$DemoLab_GCP_DNSZone \
+		--name "$AWS_CLUSTER_DNS." --ttl $dnsrecordttl --type $dnsrecordtype "$dnsrecordvalue"   
+	gcloud dns record-sets transaction add --zone=$DemoLab_GCP_DNSZone \
+		--name "$AWS_CLUSTER_DNS." --ttl $dnsrecordttl --type $dnsrecordtype "$controllerIP"   
+	gcloud dns record-sets transaction execute --zone=$DemoLab_GCP_DNSZone
+	rm -rf transaction.yaml
+	echo `date` - Finished adding DNS Record $controllerIP to $AWS_CLUSTER_DNS in GCP DNS
+fi
 
 echo `date` - Waiting for kubectl connectivity to Kubernetes ... 
 etcdhealth="false"

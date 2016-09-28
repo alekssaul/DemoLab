@@ -16,12 +16,9 @@ case $DemoLab_Infra in
 		exit 1 ;;
 esac
 
-exit
-
 echo `date` - Deploying Applications
 applications=$(env | grep DemoLab_SETUP_ | grep true)
-
-for app in $Applications ; do 
+for app in $applications ; do 
 	appname=$(echo $app | awk -F '[_=]' '{print $3}' |  tr '[:upper:]' '[:lower:]')
 	./apps/$appname/$appname-up.sh; 
 done
