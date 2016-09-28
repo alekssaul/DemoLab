@@ -16,4 +16,6 @@ fi
 kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOKNAMESPACE create -f `dirname $0`/manifests/replicationcontroller.yaml
 kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOKNAMESPACE create -f `dirname $0`/manifests/service.yaml
 
+source $DemoLab_RootFolder/infra/dns/modify_dns.sh
+
 echo `date` - Finished Executing $0 
