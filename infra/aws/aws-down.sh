@@ -17,6 +17,7 @@ pushd `dirname $0`/cluster
 
 echo `date` - Executing kube-aws Destroy...
 kube-aws destroy
+popd
 
 echo `date` - Cleaning up the assets ...
 rm -rf $DemoLab_RootFolder/infra/aws/cluster

@@ -3,7 +3,7 @@ set -e
 
 echo `date` - Executing $0 ...
 
-WEBHOOKNAMESPACE=${WEBHOOKNAMESPACE:-webhook}
+QUAY_NAMESPACE=${QUAY_NAMESPACE:-quay-enterprise}
 
 if [ $DemoLab_Infra="aws" ] ; then
 	kubeconfig=$DemoLab_RootFolder/infra/aws/cluster/kubeconfig
@@ -11,7 +11,7 @@ else
 	kubeconfig=$HOME/.kube/config
 fi
 
-kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOKNAMESPACE delete svc webhook
-kubectl --kubeconfig=$kubeconfig delete namespace $WEBHOOKNAMESPACE
+kubectl --kubeconfig=$kubeconfig --namespace=$QUAY_NAMESPACE delete svc quay-enterprise
+kubectl --kubeconfig=$kubeconfig delete namespace $QUAY_NAMESPACE
 
 echo `date` - Finished Executing $0  
