@@ -96,7 +96,6 @@ if [ -a $DemoLab_RootFolder/secrets/tectonic-config.yaml ] ; then
 	modify_dns "$consolecname" "$tectonicelb"
 	modify_dns "$identitycname" "$tectonicelb"
 	echo `date` - INFO: Please make sure that $consoleurl and $identityurl CNAME points to $tectonicelb
-	read -n1 -r -p "Press any key to continue..." key
 fi 
 
 echo `date` - Finished Executing $0
