@@ -51,7 +51,7 @@ aws elb register-instances-with-load-balancer \
 
 aws elb configure-health-check \
 	--load-balancer-name $tectonicelbname \
-	--health-check Target=HTTPS:32001/health,Interval=30,Timeout=5,UnhealthyThreshold=2,HealthyThreshold=10 2> /dev/stdout 1> /dev/null 
+	--health-check Target=HTTPS:32001/health,Interval=30,Timeout=5,UnhealthyThreshold=2,HealthyThreshold=2 2> /dev/stdout 1> /dev/null 
 
 aws ec2 authorize-security-group-ingress \
 	--group-id $sggroup \

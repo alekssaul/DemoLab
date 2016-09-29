@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Syntaxh :modify_dns URL replacement
 function modify_dns () {
 	dnsrecord=$(gcloud dns record-sets list --zone=$DemoLab_GCP_DNSZone --name "$1." | grep $1.)
 	if [[ -n $dnsrecord ]] ; then

@@ -4,7 +4,7 @@
 export DemoLab_Infra=aws
 export DemoLab_SETUP_JENKINS=false
 export DemoLab_SETUP_TECTONIC=true
-export DemoLab_SETUP_WEBHOOK=false
+export DemoLab_SETUP_WEBHOOK=true
 export DemoLab_Infra_TORUS=false
 export DemoLab_RootFolder=$PWD
 export DemoLab_GCP_DNSZone="alekssaul"
@@ -38,7 +38,8 @@ fi
 
 ### Variables for Webhook
 if [ $DemoLab_SETUP_WEBHOOK="true" ]; then
-	export WEBHOOKNAMESPACE=webhook
+	export WEBHOOK_NAMESPACE=webhook
+	export WEBHOOK_DNS=webhook.$AWS_CLUSTER_DNS
 fi
 
 ### Variables for Jenkins
