@@ -39,7 +39,7 @@ spec:
       containers:
       - name: tectonic-manager
         imagePullPolicy: IfNotPresent
-        image: quay.io/coreos/tectonic-manager:b9d40797363fc7afc3d75dcee47df77687b432b7
+        image: quay.io/aleks_saul/tectonic-manager:0575b920d2c94c4b98e4c5f227e85f73da3c57d0
         command: ["/tectonic-manager", "run"]
         ports:
         - containerPort: 8080

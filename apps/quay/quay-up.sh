@@ -14,7 +14,7 @@ kubectl --kubeconfig=$kubeconfig  create -f $DemoLab_RootFolder/apps/quay/manife
 kubectl --kubeconfig=$kubeconfig --namespace=$QUAY_NAMESPACE create -f $TECTONIC_PULL_SECRET
 kubectl --kubeconfig=$kubeconfig --namespace=$QUAY_NAMESPACE create -f  $DemoLab_RootFolder/apps/quay/manifests/quay-enterprise-config-secret.yml
 kubectl --kubeconfig=$kubeconfig --namespace=$QUAY_NAMESPACE create -f  $DemoLab_RootFolder/apps/quay/manifests/quay-enterprise-redis.yml
-kubectl --kubeconfig=$kubeconfig --namespace=$QUAY_NAMESPACE create -f  $DemoLab_RootFolder/apps/quay/manifests/quay-enterprise-service-nodeport.yml
+kubectl --kubeconfig=$kubeconfig --namespace=$QUAY_NAMESPACE create -f  $DemoLab_RootFolder/apps/quay/manifests/quay-enterprise-service-loadbalancer.yml
 kubectl --kubeconfig=$kubeconfig --namespace=$QUAY_NAMESPACE create -f  $DemoLab_RootFolder/apps/quay/manifests/quay-enterprise-app-rc.yml
 
 echo `date` - Finished Executing $0 

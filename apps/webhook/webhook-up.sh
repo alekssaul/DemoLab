@@ -14,14 +14,9 @@ else
 fi
 kubectl --kubeconfig=$kubeconfig create namespace $WEBHOOK_NAMESPACE
 kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOK_NAMESPACE create -f `dirname $0`/manifests/replicationcontroller.yaml
+kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOK_NAMESPACE create -f `dirname $0`/manifests/service.yaml
 
-#source $DemoLab_RootFolder/infra/dns/modify_dns.sh
 
-if [ $DemoLab_Infra="aws" ]; then
-	kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOK_NAMESPACE create -f `dirname $0`/manifests/service_nodeport.yaml
-else
-	kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOK_NAMESPACE create -f `dirname $0`/manifests/service.yaml
-fi
 
 #modify_dns "$WEBHOOK_DNS" "$WEBHOOK_SERVICEIP"
 
