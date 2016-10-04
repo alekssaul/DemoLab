@@ -4,12 +4,17 @@
 export DemoLab_Infra=aws
 export DemoLab_SETUP_JENKINS=false
 export DemoLab_SETUP_TECTONIC=true
-export DemoLab_SETUP_WEBHOOK=true
+export DemoLab_TECTONIC_Enterprise=true
+export DemoLab_SETUP_WEBHOOK=false
+export DemoLab_SETUP_COREUPDATE=false
 export DemoLab_SETUP_QUAY=false
 export DemoLab_Infra_TORUS=false
+
+
+
+
 export DemoLab_RootFolder=$PWD
-export DemoLab_GCP_DNSZone="alekssaul"
-export DemoLab_TECTONIC_Enterprise=true
+
 
 ### Variables for GCP
 if [ $DemoLab_Infra="gcp" ]; then
@@ -17,6 +22,7 @@ if [ $DemoLab_Infra="gcp" ]; then
 	export KUBERNETESLOCATION=$HOME/dev/workspace/kubernetes
 	export ENABLE_NODE_AUTOSCALER=false
 	export AUTOSCALER_MAX_NODES=5
+	export DemoLab_GCP_DNSZone="alekssaul"
 fi 
 
 ### Variables for AWS

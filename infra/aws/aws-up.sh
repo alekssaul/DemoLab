@@ -37,7 +37,6 @@ kube-aws init --cluster-name=$AWS_CLUSTER_name \
 --key-name=$AWS_CLUSTER_keypair \
 --kms-key-arn="$AWS_CLUSTER_kms"
 
-# Make some changes to config.yaml
 case `uname -s` in
 	Darwin)
 	sed -i '' -e 's@# instanceCIDR: \"10.0.0.0/24\"@instanceCIDR: \"10.0.0.0/24\"@g' cluster.yaml
@@ -65,11 +64,28 @@ esac
 echo `date` - Rendering kube-aws assets
 kube-aws render
 
+# Make some changes to userdata
+case `uname -s` in
+	Darwin)
+	sed -i '' -e 's@reboot-strategy: \"off\"@reboot-strategy: \"etcd-lock\"@g' userdata/cloud-config-worker
+	sed -i '' -e 's@reboot-strategy: \"off\"@reboot-strategy: \"etcd-lock\"@g' userdata/cloud-config-controller
+	;;
+
+	*)
+	sed -i 's@reboot-strategy: \"off\"@reboot-strategy: \"etcd-lock\"@g' userdata/cloud-config-worker
+	sed -i 's@reboot-strategy: \"off\"@reboot-strategy: \"etcd-lock\"@g' userdata/cloud-config-controller
+	;;
+esac
+
+cat userdata/cloud-config-worker | awk '/reboot-strategy: \"etcd-lock\"/{print;print "    group: 256600ee-81bb-43d3-bddb-b5fac96d69d7&\n    server: http:\/\/coreupdate-app:8000&\n  locksmith:\n    group: \"Tectonic Production\"\n    endpoint: \{\{ .ETCDEndpoints \}\}";next}1' > userdata/cloud-config-worker2
+cat userdata/cloud-config-controller | awk '/reboot-strategy: \"etcd-lock\"/{print;print "    group: 256600ee-81bb-43d3-bddb-b5fac96d69d7&\n    server: http:\/\/coreupdate-app:8000&\n  locksmith:\n    group: \"Tectonic Production\"\n    endpoint: \"http:\/\/\$private_ipv4:2379\"";next}1' > userdata/cloud-config-controller2
+mv userdata/cloud-config-worker2 userdata/cloud-config-worker
+mv userdata/cloud-config-controller2 userdata/cloud-config-controller
+
+
 if [ "$DemoLab_SETUP_TORUS" == "true" ]; then
 	..\torus\torus-aws-setup.sh
 fi
-
-exit
 
 echo `date` - Executing kube-aws up
 kube-aws up

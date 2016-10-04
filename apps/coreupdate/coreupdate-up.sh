@@ -17,5 +17,11 @@ for kubeminion in $kubeminions ; do kubeminionlabel=$kubeminion; done
 kubectl --kubeconfig=$kubeconfig label node $kubeminionlabel coreupdate-postgres="true"
 
 kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdate-db.yaml
+kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/secrets/coreos-pull-secret.yaml
+kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdate-configmap.yaml
+kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdate-init-db.yaml
+kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdateinit-configmap.yaml
+kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdate-app.yaml
+kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdate-init-app.yaml
 
 echo `date` - Finished Executing $0 
