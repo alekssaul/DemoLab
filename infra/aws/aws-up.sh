@@ -38,14 +38,29 @@ kube-aws init --cluster-name=$AWS_CLUSTER_name \
 --kms-key-arn="$AWS_CLUSTER_kms"
 
 # Make some changes to config.yaml
-sed -i 's@# instanceCIDR: \"10.0.0.0/24\"@instanceCIDR: \"10.0.0.0/24\"@g' cluster.yaml
-sed -i 's@#workerInstanceType: m3.medium@workerInstanceType: '$AWS_CONFIG_workerinstancetype'@g' cluster.yaml
-sed -i 's@#controllerInstanceType: m3.medium@controllerInstanceType: '$AWS_CONFIG_controllerinstancetype'@g' cluster.yaml
-sed -i 's@#workerCount: 1@workerCount: '$AWS_CONFIG_workerCount'@g' cluster.yaml
-sed -i 's@#stackTags:@stackTags:@g' cluster.yaml
-sed -i 's@#  Name: \"Kubernetes\"@  Name: \"Kubernetes\"@g' cluster.yaml
-sed -i 's@#  Environment: \"Production\"@  Environment: \"'$AWS_CLUSTER_name'\"@g' cluster.yaml
-sed -i 's@# kubernetesVersion: v1.3.6_coreos.0@kubernetesVersion: v1.4.0_coreos.2@g' cluster.yaml
+case `uname -s` in
+	Darwin)
+	sed -i '' -e 's@# instanceCIDR: \"10.0.0.0/24\"@instanceCIDR: \"10.0.0.0/24\"@g' cluster.yaml
+	sed -i '' -e 's@#workerInstanceType: m3.medium@workerInstanceType: '$AWS_CONFIG_workerinstancetype'@g' cluster.yaml
+	sed -i '' -e 's@#controllerInstanceType: m3.medium@controllerInstanceType: '$AWS_CONFIG_controllerinstancetype'@g' cluster.yaml
+	sed -i '' -e 's@#workerCount: 1@workerCount: '$AWS_CONFIG_workerCount'@g' cluster.yaml
+	sed -i '' -e 's@#stackTags:@stackTags:@g' cluster.yaml
+	sed -i '' -e 's@#  Name: \"Kubernetes\"@  Name: \"Kubernetes\"@g' cluster.yaml
+	sed -i '' -e 's@#  Environment: \"Production\"@  Environment: \"'$AWS_CLUSTER_name'\"@g' cluster.yaml
+	sed -i '' -e 's@# kubernetesVersion: v1.3.6_coreos.0@kubernetesVersion: v1.4.0_coreos.2@g' cluster.yaml
+	;;
+
+	*)
+	sed -i 's@# instanceCIDR: \"10.0.0.0/24\"@instanceCIDR: \"10.0.0.0/24\"@g' cluster.yaml
+	sed -i 's@#workerInstanceType: m3.medium@workerInstanceType: '$AWS_CONFIG_workerinstancetype'@g' cluster.yaml
+	sed -i 's@#controllerInstanceType: m3.medium@controllerInstanceType: '$AWS_CONFIG_controllerinstancetype'@g' cluster.yaml
+	sed -i 's@#workerCount: 1@workerCount: '$AWS_CONFIG_workerCount'@g' cluster.yaml
+	sed -i 's@#stackTags:@stackTags:@g' cluster.yaml
+	sed -i 's@#  Name: \"Kubernetes\"@  Name: \"Kubernetes\"@g' cluster.yaml
+	sed -i 's@#  Environment: \"Production\"@  Environment: \"'$AWS_CLUSTER_name'\"@g' cluster.yaml
+	sed -i 's@# kubernetesVersion: v1.3.6_coreos.0@kubernetesVersion: v1.4.0_coreos.2@g' cluster.yaml
+	;;
+esac
 
 echo `date` - Rendering kube-aws assets
 kube-aws render
@@ -53,6 +68,8 @@ kube-aws render
 if [ "$DemoLab_SETUP_TORUS" == "true" ]; then
 	..\torus\torus-aws-setup.sh
 fi
+
+exit
 
 echo `date` - Executing kube-aws up
 kube-aws up
