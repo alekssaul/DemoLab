@@ -10,7 +10,7 @@ spec:
   ports:
     - port: 5432
   selector:
-    coreupdate-component: db  
+    coreupdate-component: db
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -24,24 +24,22 @@ spec:
   selector: 
     matchLabels:       
       coreupdate-component: db
-  strategy:
-    type: Recreate
   template:
-    metadata: 
+    metadata:
+      namespace: coreupdate 
       labels: 
-        coreupdate-component: db        
-      name: coreupdate-db
+        coreupdate-component: db
     spec:
       containers:
-        - env: 
-          - name: POSTGRES_USER
-            value: "coreupdate"
-          - name: POSTGRES_PASSWORD
-            value: "coreupdate"
-          - name: POSTGRES_DB 
-            value: "coreupdate" 
-          - name: PG_DATA
-            value: /var/lib/postgresql/data
+      - env: 
+        - name: POSTGRES_USER
+          value: "coreupdate"
+        - name: POSTGRES_PASSWORD
+          value: "coreupdate"
+        - name: POSTGRES_DB 
+          value: "coreupdate" 
+        - name: PG_DATA
+          value: /var/lib/postgresql/data
         image: postgres:9.5
         name: coreupdate-postgres
         ports:
