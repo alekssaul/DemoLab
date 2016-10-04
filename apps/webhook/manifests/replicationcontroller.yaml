@@ -15,3 +15,8 @@ spec:
       - name: webhook
         image: quay.io/aleks_saul/webhook:v0.3
         imagePullPolicy: Always
+        env: 
+          - name: Github_BOTUSER
+            value: botofalekssaul
+          - name: Github_BOTPassword
+            value: replacepassword

@@ -45,6 +45,7 @@ sed -i 's@#workerCount: 1@workerCount: '$AWS_CONFIG_workerCount'@g' cluster.yaml
 sed -i 's@#stackTags:@stackTags:@g' cluster.yaml
 sed -i 's@#  Name: \"Kubernetes\"@  Name: \"Kubernetes\"@g' cluster.yaml
 sed -i 's@#  Environment: \"Production\"@  Environment: \"'$AWS_CLUSTER_name'\"@g' cluster.yaml
+sed -i 's@# kubernetesVersion: v1.3.6_coreos.0@kubernetesVersion: v1.4.0_coreos.2@g' cluster.yaml
 
 echo `date` - Rendering kube-aws assets
 kube-aws render

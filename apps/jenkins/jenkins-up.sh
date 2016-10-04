@@ -27,6 +27,9 @@ if [ DemoLab_Infra=="gcp" ]; then
 	fi
 
 	gcloud compute instances detach-disk $KUBEMASTER --disk jenkins-home 2> /dev/stdout 1> /dev/null
+elif [ DemoLab_Infra=="aws" ]; then
+	echo `date` - Creating $JENKINSDISK on AWS ...
+	
 fi
 
 echo `date` - Creating Jenkins assets ...
