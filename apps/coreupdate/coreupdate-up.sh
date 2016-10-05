@@ -16,8 +16,19 @@ kubeminions=$(kubectl --kubeconfig=$kubeconfig get nodes | grep -v SchedulingDis
 for kubeminion in $kubeminions ; do kubeminionlabel=$kubeminion; done
 kubectl --kubeconfig=$kubeconfig label node $kubeminionlabel coreupdate-postgres="true"
 
+cp $DemoLab_RootFolder/secrets/coreos-pull-secret.yaml /tmp/coreos-pull-secret-coreupdate.yaml
+case `uname -s` in
+	Darwin)
+	sed -i '' -e 's@namespace: tectonic-system@namespace: '$COREUPDATE_NAMESPACE'@g' /tmp/coreos-pull-secret-coreupdate.yaml
+	;;
+
+	*)
+	sed -i 's@namespace: tectonic-system@namespace: '$COREUPDATE_NAMESPACE'@g' /tmp/coreos-pull-secret-coreupdate.yaml
+	;;
+esac
+
 kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdate-db.yaml
-kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/secrets/coreos-pull-secret.yaml
+kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f /tmp/coreos-pull-secret-coreupdate.yaml
 kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdate-configmap.yaml
 kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdate-init-db.yaml
 kubectl --kubeconfig=$kubeconfig --namespace=$COREUPDATE_NAMESPACE create -f $DemoLab_RootFolder/apps/coreupdate/manifests/coreupdateinit-configmap.yaml

@@ -77,8 +77,8 @@ case `uname -s` in
 	;;
 esac
 
-cat userdata/cloud-config-worker | awk '/reboot-strategy: \"etcd-lock\"/{print;print "    group: 256600ee-81bb-43d3-bddb-b5fac96d69d7&\n    server: http:\/\/coreupdate-app:8000&\n  locksmith:\n    group: \"Tectonic Production\"\n    endpoint: \{\{ .ETCDEndpoints \}\}";next}1' > userdata/cloud-config-worker2
-cat userdata/cloud-config-controller | awk '/reboot-strategy: \"etcd-lock\"/{print;print "    group: 256600ee-81bb-43d3-bddb-b5fac96d69d7&\n    server: http:\/\/coreupdate-app:8000&\n  locksmith:\n    group: \"Tectonic Production\"\n    endpoint: \"http:\/\/\$private_ipv4:2379\"";next}1' > userdata/cloud-config-controller2
+cat userdata/cloud-config-worker | awk '/reboot-strategy: \"etcd-lock\"/{print;print "    group: 256600ee-81bb-43d3-bddb-b5fac96d69d7\n    server: http:\/\/coreupdate-app:8000\n  locksmith:\n    group: \"Tectonic Production\"\n    endpoint: \{\{ .ETCDEndpoints \}\}";next}1' > userdata/cloud-config-worker2
+cat userdata/cloud-config-controller | awk '/reboot-strategy: \"etcd-lock\"/{print;print "    group: 256600ee-81bb-43d3-bddb-b5fac96d69d7\n    server: http:\/\/coreupdate-app:8000\n  locksmith:\n    group: \"Tectonic Production\"\n    endpoint: \"http:\/\/\$private_ipv4:2379\"";next}1' > userdata/cloud-config-controller2
 mv userdata/cloud-config-worker2 userdata/cloud-config-worker
 mv userdata/cloud-config-controller2 userdata/cloud-config-controller
 

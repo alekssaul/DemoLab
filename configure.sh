@@ -6,7 +6,7 @@ export DemoLab_SETUP_JENKINS=false
 export DemoLab_SETUP_TECTONIC=true
 export DemoLab_TECTONIC_Enterprise=true
 export DemoLab_SETUP_WEBHOOK=false
-export DemoLab_SETUP_COREUPDATE=false
+export DemoLab_SETUP_COREUPDATE=true
 export DemoLab_SETUP_QUAY=false
 export DemoLab_Infra_TORUS=false
 
