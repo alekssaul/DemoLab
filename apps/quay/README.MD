@@ -63,7 +63,7 @@ Run Quay
 cp .dockercfg ~/
 sudo cp .dockercfg /root/.dockercfg
 
-sudo docker pull quay.io/coreos/registry:v1.16.5
+sudo docker pull quay.io/coreos/registry:v1.17.1
 sudo docker run --restart=always -p 443:443 -p 80:80 --privileged=true -v $QUAY_CONFIG:/conf/stack -v $QUAY_STORAGE:/datastorage -d quay.io/coreos/registry:v1.16.5
 ```
 
@@ -86,7 +86,7 @@ docker run --rm --link postgres:postgres postgres sh -c 'echo "create database c
 
 Clair Config
 
-Edit Clair config.yaml; https://tectonic.com/quay-enterprise/docs/1.16.0/clair.html
+Edit Clair config.yaml; https://tectonic.com/quay-enterprise/docs/latest/clair.html
 ```shell
 sudo mkdir -p $CLAIR_CONFIG
 sudo vi $CLAIR_CONFIG/config.yaml
@@ -94,5 +94,5 @@ sudo vi $CLAIR_CONFIG/config.yaml
 
 ## Run Clair
 ```shell
-sudo docker run --restart=always -p 6060:6060 -p 6061:6061 -v $CLAIR_CONFIG:/config quay.io/coreos/clair-jwt:v1.2.2
+sudo docker run --restart=always -p 6060:6060 -p 6061:6061 -v $CLAIR_CONFIG:/config quay.io/coreos/clair-jwt:v1.2.4
 ```
