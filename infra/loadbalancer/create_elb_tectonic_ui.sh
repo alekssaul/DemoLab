@@ -33,7 +33,7 @@ workerinstanceids=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-
 
 awselb=$(aws elb create-load-balancer \
 	--load-balancer-name $AWS_CLUSTER_name-tectonic \
-	--listeners Protocol=TCP,LoadBalancerPort=32000,InstanceProtocol=TCP,InstancePort=32000 Protocol=TCP,LoadBalancerPort=32001,InstanceProtocol=TCP,InstancePort=32001 \
+	--listeners Protocol=TCP,LoadBalancerPort=32000,InstanceProtocol=TCP,InstancePort=32000 Protocol=TCP,LoadBalancerPort=32001,InstanceProtocol=TCP,InstancePort=32001 Protocol=TCP,LoadBalancerPort=32021,InstanceProtocol=TCP,InstancePort=32021 \
 	--subnets $subnetid \
 	--security-groups $sggroup \
 	--scheme Internet-facing)
@@ -62,6 +62,11 @@ aws ec2 authorize-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
 	--protocol tcp --port 32001 2> /dev/stdout 1> /dev/null 
+
+aws ec2 authorize-security-group-ingress \
+	--group-id $sggroup \
+	--cidr 0.0.0.0/0 \
+	--protocol tcp --port 32021 2> /dev/stdout 1> /dev/null 
 
 aws autoscaling attach-load-balancers \
 	--auto-scaling-group-name $workerASG \

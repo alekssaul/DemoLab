@@ -24,8 +24,8 @@ fi
 kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOK_NAMESPACE create -f `dirname $0`/manifests/service.yaml
 
 WEBHOOK_SERVICEIP=$(kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOK_NAMESPACE get svc -o wide | grep webhook | awk '{print $3}')
-until [ "$etcdhealth" == "true" ]; do 
-	etcdhealth=$(kubectl --kubeconfig=$kubeconfig get cs | grep etcd | awk '{print $4}' | tr -d '"' | tr -d '}')
+until [ "$WEBHOOK_SERVICEIP" != "<pending>" ]; do 
+	WEBHOOK_SERVICEIP=$(kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOK_NAMESPACE get svc -o wide | grep webhook | awk '{print $3}')
 	sleep 60
 done
 
