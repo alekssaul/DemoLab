@@ -67,6 +67,17 @@ sudo docker pull quay.io/coreos/registry:v1.17.1
 sudo docker run --restart=always -p 443:443 -p 80:80 --privileged=true -v $QUAY_CONFIG:/conf/stack -v $QUAY_STORAGE:/datastorage -d quay.io/coreos/registry:v1.16.5
 ```
 
+## Quay Enterprise SSL (Optional)
+follow documentation in; https://tectonic.com/quay-enterprise/docs/latest/quay-ssl.html
+```shell
+openssl genrsa -out rootCA.key 2048
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.pem
+openssl genrsa -out ssl.key 2048
+openssl req -new -key ssl.key -out ssl.csr
+openssl x509 -req -in ssl.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out ssl.cert -days 500 -sha256
+```
+
+
 ## Clair 
 Clair Variables
 ```shell

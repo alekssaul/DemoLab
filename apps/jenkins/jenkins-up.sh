@@ -29,6 +29,8 @@ if [ DemoLab_Infra=="gcp" ]; then
 	gcloud compute instances detach-disk $KUBEMASTER --disk jenkins-home 2> /dev/stdout 1> /dev/null
 elif [ DemoLab_Infra=="aws" ]; then
 	echo `date` - Creating $JENKINSDISK on AWS ...
+	jenkinsebc=$(aws ec2 create-volume --availability-zone $AWS_CLUSTER_AZ --size 5)
+	jenkinsvolid=$(echo $jenkinsebc | jq '.VolumeId' | tr -d '"')
 	
 fi
 
