@@ -5,6 +5,7 @@ AWS_CLUSTER_name=${AWS_CLUSTER_name:-aleksdemo}
 AWS_CLUSTER_region=${AWS_CLUSTER_region:-us-west-1}
 AWS_CLUSTER_AZ=${AWS_CLUSTER_AZ:-us-west-1c}
 DemoLab_GCP_DNSZone=${DemoLab_GCP_DNSZone:-alekssaul}
+COREOS_KUBE_VERSION=${COREOS_KUBE_VERSION:-v1.4.1_coreos.0}
 
 echo `date` - Checking for requirements ...
 	if [[ $(which kube-aws) ]]; then
@@ -46,7 +47,7 @@ case `uname -s` in
 	sed -i '' -e 's@#stackTags:@stackTags:@g' cluster.yaml
 	sed -i '' -e 's@#  Name: \"Kubernetes\"@  Name: \"Kubernetes\"@g' cluster.yaml
 	sed -i '' -e 's@#  Environment: \"Production\"@  Environment: \"'$AWS_CLUSTER_name'\"@g' cluster.yaml
-	sed -i '' -e 's@# kubernetesVersion: v1.3.6_coreos.0@kubernetesVersion: v1.4.0_coreos.2@g' cluster.yaml
+	sed -i '' -e 's@# kubernetesVersion: v1.3.6_coreos.0@kubernetesVersion: '$COREOS_KUBE_VERSION'@g' cluster.yaml
 	;;
 
 	*)
@@ -57,7 +58,7 @@ case `uname -s` in
 	sed -i 's@#stackTags:@stackTags:@g' cluster.yaml
 	sed -i 's@#  Name: \"Kubernetes\"@  Name: \"Kubernetes\"@g' cluster.yaml
 	sed -i 's@#  Environment: \"Production\"@  Environment: \"'$AWS_CLUSTER_name'\"@g' cluster.yaml
-	sed -i 's@# kubernetesVersion: v1.3.6_coreos.0@kubernetesVersion: v1.4.0_coreos.2@g' cluster.yaml
+	sed -i 's@# kubernetesVersion: v1.3.6_coreos.0@kubernetesVersion: '$COREOS_KUBE_VERSION'@g' cluster.yaml
 	;;
 esac
 
