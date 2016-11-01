@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: coreupdate
+  name: coreupdate-db
+  labels:
+    coreupdate-component: db
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+  selector:
+    coreupdate-component: db
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: coreupdate
+  name: coreupdate-db
+  labels:
+    coreupdate-component: db
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:       
+      coreupdate-component: db
+  template:
+    metadata:
+      namespace: coreupdate 
+      labels: 
+        coreupdate-component: db
+    spec:
+      containers:
+      - env: 
+        - name: POSTGRES_USER
+          value: "coreupdate"
+        - name: POSTGRES_PASSWORD
+          value: "coreupdate"
+        - name: POSTGRES_DB 
+          value: "coreupdate" 
+        - name: PG_DATA
+          value: /var/lib/postgresql/data
+        image: postgres:9.5
+        name: coreupdate-postgres
+        ports:
+        - containerPort: 5432
+          name: postgres        
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: coreupdate-pg-data  
+            readOnly: false
+      nodeSelector: 
+          coreupdate-postgres: "true"
+      volumes:
+        - hostPath:
+            path: /var/lib/coreupdate-postgresql/data
+          name: coreupdate-pg-data 

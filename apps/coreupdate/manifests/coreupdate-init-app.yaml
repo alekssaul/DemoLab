@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: coreupdate
+  name: coreupdate-init-app
+  labels:
+    coreupdate-component: init-app
+spec:
+  template:
+    metadata:
+      namespace: coreupdate
+      labels:
+        coreupdate-component: init-app
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - image: quay.io/coreos/updateservicectl:latest
+        name: coreupdate-init-app
+        command: [ "/bin/sh" , "/init/coreupdateinit.sh" ]
+        volumeMounts:
+        - name: coreupdate-config
+          mountPath: /init
+      volumes:
+        - name: coreupdate-config
+          configMap:
+            name: coreinitapp

@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: coreupdate
+  name: coreupdate-init-db
+  labels:
+    coreupdate-component: init-db
+spec:
+  template:
+    metadata:
+      namespace: coreupdate
+      labels:
+        coreupdate-component: init-db
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - env:
+          - name: PGPASSWORD
+            value: "coreupdate"
+        image: postgres:9.5
+        name: coreupdate-init-db
+        command: [ "/bin/sh" , "-c" , "echo create database coreupdate | psql -h coreupdate-db -p 5432 -U coreupdate" ]
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: coreupdate-pg-data  
+            readOnly: false
+      nodeSelector: 
+          coreupdate-postgres: "true"
+      volumes:
+        - hostPath:
+            path: /var/lib/coreupdate-postgresql/data
+          name: coreupdate-pg-data 

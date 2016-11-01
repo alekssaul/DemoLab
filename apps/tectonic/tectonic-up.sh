@@ -5,12 +5,8 @@ TECTONIC_PULL_SECRET=${TECTONIC_PULL_SECRET:-$HOME/Downloads/coreos-pull-secret.
 
 echo `date` - Executing $0 ...
 
-if [[ "$DemoLab_SETUP_TECTONIC_Enterprise" == "true" ]] ; then
-	kubeconfig=$DemoLab_RootFolder/infra/aws/cluster/kubeconfig
-	if [ $DemoLab_Infra="aws" ]; then
-		# Create ELB on AWS
-		$DemoLab_RootFolder/infra/loadbalancer/create_elb_tectonic_ui.sh		
-	fi	
+if [[ "$DemoLab_TECTONIC_Enterprise" == "true" ]] ; then
+	kubeconfig=$DemoLab_RootFolder/infra/aws/cluster/kubeconfig	
 	kubectl --kubeconfig=$kubeconfig create namespace $TECTONICNAMESPACE 2> /dev/stdout 1> /dev/null
 	kubectl --kubeconfig=$kubeconfig --namespace=$TECTONICNAMESPACE create -f $DemoLab_RootFolder/secrets/tectonic-ca-cert-secret.yaml
 	kubectl --kubeconfig=$kubeconfig --namespace=$TECTONICNAMESPACE create -f $DemoLab_RootFolder/secrets/tectonic-config.yaml
@@ -20,6 +16,10 @@ if [[ "$DemoLab_SETUP_TECTONIC_Enterprise" == "true" ]] ; then
 	kubectl --kubeconfig=$kubeconfig --namespace=$TECTONICNAMESPACE create -f $DemoLab_RootFolder/secrets/tectonic-license.yaml
 	kubectl --kubeconfig=$kubeconfig --namespace=$TECTONICNAMESPACE create -f $DemoLab_RootFolder/secrets/coreos-pull-secret.yaml
 	kubectl --kubeconfig=$kubeconfig --namespace=$TECTONICNAMESPACE create -f `dirname $0`/manifests/tectonic-manager.yaml
+	if [ $DemoLab_Infra="aws" ]; then
+		# Create ELB on AWS
+		$DemoLab_RootFolder/infra/loadbalancer/create_elb_tectonic_ui.sh		
+	fi	
 else
 	kubeconfig=$HOME/.kube/config 	
 	kubectl --kubeconfig=$kubeconfig create namespace $TECTONICNAMESPACE 2> /dev/stdout 1> /dev/null

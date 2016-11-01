@@ -2,11 +2,19 @@
 
 ### Main Variables
 export DemoLab_Infra=aws
-export DemoLab_SETUP_JENKINS=true
+export DemoLab_SETUP_JENKINS=false
 export DemoLab_SETUP_TECTONIC=true
+export DemoLab_TECTONIC_Enterprise=true
 export DemoLab_SETUP_WEBHOOK=true
+export DemoLab_SETUP_COREUPDATE=true
+export DemoLab_SETUP_QUAY=false
 export DemoLab_Infra_TORUS=false
+
+
+
+
 export DemoLab_RootFolder=$PWD
+
 
 ### Variables for GCP
 if [ $DemoLab_Infra="gcp" ]; then
@@ -14,6 +22,7 @@ if [ $DemoLab_Infra="gcp" ]; then
 	export KUBERNETESLOCATION=$HOME/dev/workspace/kubernetes
 	export ENABLE_NODE_AUTOSCALER=false
 	export AUTOSCALER_MAX_NODES=5
+	export DemoLab_GCP_DNSZone="alekssaul"
 fi 
 
 ### Variables for AWS
@@ -29,15 +38,15 @@ if [ $DemoLab_Infra="aws" ]; then
 fi 
 
 ### Variables for Tectonic
-if [ $DemoLab_SETUP_TECTONIC="true" ]; then
-	export DemoLab_SETUP_TECTONIC_Enterprise="true"
+if [ $DemoLab_SETUP_TECTONIC="true" ]; then	
 	export TECTONICNAMESPACE=tectonic-system
 	export TECTONIC_PULL_SECRET=$HOME/Downloads/coreos-pull-secret.yml
 fi
 
 ### Variables for Webhook
 if [ $DemoLab_SETUP_WEBHOOK="true" ]; then
-	export WEBHOOKNAMESPACE=webhook
+	export WEBHOOK_NAMESPACE=webhook
+	export WEBHOOK_DNS=webhook.$AWS_CLUSTER_DNS
 fi
 
 ### Variables for Jenkins

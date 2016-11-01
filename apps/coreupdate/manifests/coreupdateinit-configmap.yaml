@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  coreupdateinit.sh: |-
+    #!/bin/sh
+    key=$(updateservicectl --server=http://coreupdate-app:32021 database init)
+
+    updateservicectl --server=http://coreupdate-app:32021 --user=admin --key=$key admin-user create aleks.saul@coreos.com
+
+    updateservicectl --server=http://coreupdate-app:32021 --user=admin --key=$key app create --label=CoreOS --app-id=e96281a6-d1af-4bde-9a0a-97b76e56dc57
+    updateservicectl --server=http://coreupdate-app:32021 upstream create --url=https://public.update.core-os.net
+    updateservicectl --server=http://coreupdate-app:32021 upstream sync
+    updateservicectl --server=http://coreupdate-app:32021 group create --app-id=e96281a6-d1af-4bde-9a0a-97b76e56dc57 --channel=Stable --group-id=256600ee-81bb-43d3-bddb-b5fac96d69d7 --label="Tectonic Production"
+    updateservicectl --server=http://coreupdate-app:32021 group pause  --group-id=256600ee-81bb-43d3-bddb-b5fac96d69d7 --app-id=e96281a6-d1af-4bde-9a0a-97b76e56dc57
+kind: ConfigMap
+metadata:
+  creationTimestamp: 2016-10-04T02:50:04Z
+  name: coreinitapp
+  namespace: coreupdate
+  resourceVersion: "2212"
+  selfLink: /api/v1/namespaces/coreupdate/configmaps/coreinitapp
+  uid: 40a24044-89dd-11e6-96a9-8a6c05fcff96

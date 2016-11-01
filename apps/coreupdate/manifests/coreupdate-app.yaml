@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: coreupdate
+  name: coreupdate-app
+  labels:
+    coreupdate-component: app
+spec:
+  type: NodePort
+  ports:
+    - name: default
+      nodePort: 32021
+      port: 32021
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    coreupdate-component: app
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: coreupdate
+  name: coreupdate-app
+  labels:
+    coreupdate-component: app
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:       
+      coreupdate-component: app
+  template:
+    metadata:
+      namespace: coreupdate 
+      labels: 
+        coreupdate-component: app
+    spec:
+      containers:
+      - image: quay.io/coreos/coreupdate:latest
+        name: coreupdate-app
+        command: [ "/opt/coreupdate/bin/coreupdate" ]
+        args:  [ "--yaml=/etc/coreupdate/config.yaml" , "-web-assets-dir=/opt/coreupdate/cp/app/dist" ]
+        ports:
+        - containerPort: 8000
+          name: coreupdate
+        volumeMounts:
+        - name: coreupdate-config
+          mountPath: /etc/coreupdate
+      volumes:
+        - name: coreupdate-config
+          configMap:
+            name: coreupdate-config
+      imagePullSecrets:
+        - name: coreos-pull-secret  
