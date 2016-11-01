@@ -31,7 +31,7 @@ elif [ DemoLab_Infra=="aws" ]; then
 	echo `date` - Creating $JENKINSDISK on AWS ...
 	jenkinsebc=$(aws ec2 create-volume --availability-zone $AWS_CLUSTER_AZ --size 5)
 	jenkinsvolid=$(echo $jenkinsebc | jq '.VolumeId' | tr -d '"')
-	
+
 fi
 
 echo `date` - Creating Jenkins assets ...

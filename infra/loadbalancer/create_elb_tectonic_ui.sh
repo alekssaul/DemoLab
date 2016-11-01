@@ -7,14 +7,6 @@ AWS_CLUSTER_AZ=${AWS_CLUSTER_AZ:-us-west-1c}
 AWS_CLUSTER_region=${AWS_CLUSTER_region:-us-west-1}
 export AWS_DEFAULT_REGION=$AWS_CLUSTER_region
 
-echo `date` - Checking for requirements ...
-	if [[ $(which aws) ]]; then
-		echo `date` - Found AWS CLI binary
-	else 
-		echo `date` - ERROR: Could Not Found AWS CLI binary
-		exit 1 ;
-	fi
-
 # get Information from Cloud formation
 vpcid=$(aws cloudformation describe-stack-resources --stack-name $AWS_CLUSTER_name | \
 	jq '.StackResources[] | select (.ResourceType == "AWS::EC2::VPC")' | jq '.PhysicalResourceId' | tr -d '"')
@@ -33,7 +25,7 @@ workerinstanceids=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-
 
 awselb=$(aws elb create-load-balancer \
 	--load-balancer-name $AWS_CLUSTER_name-tectonic \
-	--listeners Protocol=TCP,LoadBalancerPort=32000,InstanceProtocol=TCP,InstancePort=32000 Protocol=TCP,LoadBalancerPort=32001,InstanceProtocol=TCP,InstancePort=32001 Protocol=TCP,LoadBalancerPort=32021,InstanceProtocol=TCP,InstancePort=32021 \
+	--listeners Protocol=TCP,LoadBalancerPort=32000,InstanceProtocol=TCP,InstancePort=32000 Protocol=TCP,LoadBalancerPort=32001,InstanceProtocol=TCP,InstancePort=32001 \
 	--subnets $subnetid \
 	--security-groups $sggroup \
 	--scheme Internet-facing)
@@ -47,44 +39,30 @@ tectonicelbname=$(aws elb describe-load-balancers | jq '.LoadBalancerDescription
 
 aws elb register-instances-with-load-balancer \
 	--load-balancer-name $tectonicelbname \
-	--instances $workerinstanceids 2> /dev/stdout 1> /dev/null 
+	--instances $workerinstanceids
 
 aws elb configure-health-check \
 	--load-balancer-name $tectonicelbname \
-	--health-check Target=HTTPS:32001/health,Interval=30,Timeout=5,UnhealthyThreshold=2,HealthyThreshold=2 2> /dev/stdout 1> /dev/null 
+	--health-check Target=HTTPS:32001/health,Interval=30,Timeout=5,UnhealthyThreshold=2,HealthyThreshold=10
 
 aws ec2 authorize-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32000 2> /dev/stdout 1> /dev/null 
+	--protocol tcp --port 32000
 
 aws ec2 authorize-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32001 2> /dev/stdout 1> /dev/null 
-
-aws ec2 authorize-security-group-ingress \
-	--group-id $sggroup \
-	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32021 2> /dev/stdout 1> /dev/null 
-
-aws autoscaling attach-load-balancers \
-	--auto-scaling-group-name $workerASG \
-	--load-balancer-names $tectonicelbname 2> /dev/stdout 1> /dev/null 
+	--protocol tcp --port 32001
 
 echo `date` - Finished creating ELB and modifying settings
-
-source $DemoLab_RootFolder/infra/dns/modify_dns.sh
 
 # todo modify DNS 
 if [ -a $DemoLab_RootFolder/secrets/tectonic-config.yaml ] ; then
 	consoleurl=$( cat $DemoLab_RootFolder/secrets/tectonic-config.yaml | grep console-url | awk '{print $2}')
 	identityurl=$( cat $DemoLab_RootFolder/secrets/tectonic-config.yaml | grep identity-issuer-url | awk '{print $2}')
-	consolecname=$(echo $consoleurl | awk -F '//' '{print $2}'  | awk -F ':' '{print $1}')
-	identitycname=$(echo $identityurl | awk -F '//' '{print $2}'  | awk -F ':' '{print $1}')
-	modify_dns "$consolecname" "$tectonicelb"
-	modify_dns "$identitycname" "$tectonicelb"
 	echo `date` - INFO: Please make sure that $consoleurl and $identityurl CNAME points to $tectonicelb
+	read -n1 -r -p "Press any key to continue..." key
 fi 
 
 echo `date` - Finished Executing $0

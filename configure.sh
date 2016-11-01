@@ -61,4 +61,3 @@ if [ $DemoLab_SETUP_JENKINS="true" ]; then
 	export JENKINSBACKUPFILE=jenkins-home.tar.gz
 	export JENKINSBACKUP=false
 fi
-

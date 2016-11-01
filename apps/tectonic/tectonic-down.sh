@@ -5,14 +5,12 @@ TECTONIC_PULL_SECRET=${TECTONIC_PULL_SECRET:-$HOME/Downloads/coreos-pull-secret.
 
 echo `date` - Executing $0 ...
 
-if [[ "$DemoLab_TECTONIC_Enterprise" == "true" ]] ; then
+if [[ "$DemoLab_SETUP_TECTONIC_Enterprise" == "true" ]] ; then
 	kubeconfig=$DemoLab_RootFolder/infra/aws/cluster/kubeconfig
 	if [ $DemoLab_Infra="aws" ]; then
 		# Delete ELB on AWS
 		$DemoLab_RootFolder/infra/loadbalancer/delete_elb_tectonic_ui.sh				
 	fi
-
-	
 else
 	kubeconfig=$HOME/.kube/config
 fi

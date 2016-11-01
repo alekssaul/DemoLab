@@ -14,4 +14,3 @@ fi
 kubectl --kubeconfig=$kubeconfig --namespace=$WEBHOOK_NAMESPACE delete svc webhook
 kubectl --kubeconfig=$kubeconfig delete namespace $WEBHOOK_NAMESPACE
 
-echo `date` - Finished Executing $0  

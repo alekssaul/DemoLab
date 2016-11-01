@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 set -e
 echo `date` - Executing $0 ...
 
@@ -11,16 +11,16 @@ sggroup=$(aws cloudformation describe-stack-resources --stack-name $AWS_CLUSTER_
 	jq '.StackResources[] | select (.LogicalResourceId == "SecurityGroupWorker")' | jq '.PhysicalResourceId' | tr -d '"')
 
 aws elb delete-load-balancer \
-	--load-balancer-name $AWS_CLUSTER_name-tectonic 2> /dev/stdout 1> /dev/null 
+	--load-balancer-name $AWS_CLUSTER_name-tectonic
 
 aws ec2 revoke-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32000 2> /dev/stdout 1> /dev/null 
+	--protocol tcp --port 32000
 
 aws ec2 revoke-security-group-ingress \
 	--group-id $sggroup \
 	--cidr 0.0.0.0/0 \
-	--protocol tcp --port 32001 2> /dev/stdout 1> /dev/null 
+	--protocol tcp --port 32001
 
 echo `date` - Finished Executing $0
